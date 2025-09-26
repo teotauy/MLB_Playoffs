@@ -751,7 +751,7 @@ class PlayoffSimulator {
         try {
             // Fetch live data from MLB Stats API
             const [standingsResponse, scheduleResponse] = await Promise.all([
-                fetch('https://statsapi.mlb.com/api/v1/standings?season=2025&leagueId=103,104'),
+                fetch('https://statsapi.mlb.com/api/v1/standings?leagueId=103,104'),
                 fetch('https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=' + new Date().toISOString().split('T')[0])
             ]);
 
@@ -783,10 +783,10 @@ class PlayoffSimulator {
     processStandingsData(standingsData) {
         const standings = {};
         
-        // Process AL standings
+        // Process both AL and NL standings
         if (standingsData.records && standingsData.records.length > 0) {
             standingsData.records.forEach(division => {
-                if (division.league && division.league.id === 103) { // AL
+                if (division.league && (division.league.id === 103 || division.league.id === 104)) { // AL or NL
                     division.teamRecords.forEach(team => {
                         const teamKey = this.getTeamKey(team.team.name);
                         if (teamKey) {

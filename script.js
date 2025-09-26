@@ -1026,13 +1026,22 @@ class PlayoffSimulator {
             const statusText = game.status === 'Final' ? 'Final' : 
                              game.status === 'Live' ? 'Live' : 'Scheduled';
             
+            // Determine what to show in the time/inning area
+            let timeInningDisplay = '';
+            if (game.status === 'Live' && game.inning) {
+                timeInningDisplay = `<span class="inning">${game.inning}</span>`;
+            } else if (game.status === 'Scheduled') {
+                timeInningDisplay = `<span class="time">${game.time}</span>`;
+            }
+            // For Final games, we don't show time or inning
+
             gameDiv.innerHTML = `
                 <div class="game-header">
                     <h3>${game.awayTeam} @ ${game.homeTeam}</h3>
                     <div class="game-status">
                         ${game.status === 'Live' ? '<span class="live-badge">LIVE</span>' : ''}
                         ${game.status === 'Final' ? '<span class="final-badge">FINAL</span>' : ''}
-                        <span class="time">${game.time}</span>
+                        ${timeInningDisplay}
                     </div>
                 </div>
                 <div class="game-score">

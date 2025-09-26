@@ -6,10 +6,10 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #1a1a1a;
+    background: #f8f9fa;
     min-height: 100vh;
 }
 
@@ -23,23 +23,24 @@ body {
 header {
     text-align: center;
     margin-bottom: 30px;
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e5e9;
 }
 
 header h1 {
     font-size: 2.5rem;
-    color: #2c3e50;
+    color: #1a1a1a;
     margin-bottom: 10px;
     font-weight: 700;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .subtitle {
     font-size: 1.2rem;
-    color: #7f8c8d;
+    color: #6c757d;
     font-weight: 400;
 }
 
@@ -50,12 +51,12 @@ header h1 {
 .live-data-section,
 .output-section,
 .bracket-section {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     margin-bottom: 25px;
     padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e5e9;
 }
 
 .intro-section h2,
@@ -64,10 +65,11 @@ header h1 {
 .live-data-section h2,
 .output-section h2,
 .bracket-section h2 {
-    color: #2c3e50;
+    color: #1a1a1a;
     margin-bottom: 15px;
     font-size: 1.8rem;
     font-weight: 600;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .live-note {
@@ -86,12 +88,12 @@ header h1 {
 
 /* Permutation Chart Section */
 .permutation-section {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     margin-bottom: 25px;
     padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e5e9;
 }
 
 .permutation-description {
@@ -109,30 +111,31 @@ header h1 {
 
 .chart-btn {
     padding: 12px 24px;
-    border: 2px solid #667eea;
-    background: #667eea;
+    border: 2px solid #1a1a1a;
+    background: #1a1a1a;
     color: white;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1rem;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .chart-btn:hover {
-    background: #5a6fd8;
-    border-color: #5a6fd8;
+    background: #333333;
+    border-color: #333333;
     transform: translateY(-2px);
 }
 
 .chart-btn.secondary {
     background: transparent;
-    color: #667eea;
-    border-color: #667eea;
+    color: #1a1a1a;
+    border-color: #1a1a1a;
 }
 
 .chart-btn.secondary:hover {
-    background: #667eea;
+    background: #1a1a1a;
     color: white;
 }
 
@@ -146,8 +149,8 @@ header h1 {
 }
 
 .chart-info {
-    background: rgba(102, 126, 234, 0.1);
-    border: 1px solid rgba(102, 126, 234, 0.3);
+    background: rgba(26, 26, 26, 0.1);
+    border: 1px solid rgba(26, 26, 26, 0.3);
     border-radius: 8px;
     padding: 15px;
     margin-top: 15px;
@@ -155,7 +158,7 @@ header h1 {
 
 .chart-info h4 {
     margin: 0 0 10px 0;
-    color: #667eea;
+    color: #1a1a1a;
 }
 
 .chart-info p {
@@ -198,14 +201,15 @@ header h1 {
 }
 
 .permutation-table tbody tr:hover {
-    background: rgba(102, 126, 234, 0.05);
+    background: rgba(26, 26, 26, 0.05);
 }
 
 .permutation-table .team-name {
     font-weight: 600;
-    color: #2c3e50;
+    color: #1a1a1a;
     text-align: left;
     padding-left: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .permutation-table .percentage {
@@ -226,8 +230,8 @@ header h1 {
 }
 
 .permutation-info {
-    background: rgba(102, 126, 234, 0.1);
-    border: 1px solid rgba(102, 126, 234, 0.3);
+    background: rgba(26, 26, 26, 0.1);
+    border: 1px solid rgba(26, 26, 26, 0.3);
     border-radius: 8px;
     padding: 15px;
     margin-top: 15px;
@@ -235,7 +239,7 @@ header h1 {
 
 .permutation-info h4 {
     margin: 0 0 10px 0;
-    color: #667eea;
+    color: #1a1a1a;
 }
 
 .permutation-info p {
@@ -264,15 +268,15 @@ header h1 {
 .slider-group {
     background: #f8f9fa;
     padding: 20px;
-    border-radius: 10px;
-    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    border: 2px solid #e1e5e9;
     transition: all 0.3s ease;
 }
 
 .slider-group:hover {
-    border-color: #667eea;
+    border-color: #1a1a1a;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 4px 15px rgba(26, 26, 26, 0.2);
 }
 
 .series-header {
@@ -285,9 +289,10 @@ header h1 {
 
 .series-title {
     font-weight: 700;
-    color: #2c3e50;
+    color: #1a1a1a;
     font-size: 1.1rem;
     text-align: center;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .team-logo {
@@ -303,10 +308,11 @@ header h1 {
 
 .team-name {
     font-weight: 600;
-    color: #2c3e50;
+    color: #1a1a1a;
     font-size: 1rem;
     min-width: 80px;
     text-align: center;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .slider {
@@ -361,14 +367,14 @@ header h1 {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #667eea;
+    background: #1a1a1a;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
 
 .slider::-webkit-slider-thumb:hover {
-    background: #5a6fd8;
+    background: #333333;
     transform: scale(1.1);
 }
 
@@ -376,7 +382,7 @@ header h1 {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #667eea;
+    background: #1a1a1a;
     cursor: pointer;
     border: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -396,8 +402,9 @@ header h1 {
 .series-record {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #2c3e50;
+    color: #1a1a1a;
     margin-bottom: 4px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .current-record {
@@ -428,22 +435,24 @@ header h1 {
 
 .dropdown-group label {
     font-weight: 600;
-    color: #2c3e50;
+    color: #1a1a1a;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .dropdown-group select {
     padding: 12px;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
     font-size: 1rem;
     background: white;
     transition: all 0.3s ease;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .dropdown-group select:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #1a1a1a;
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
 }
 
 /* Output Table */
@@ -469,16 +478,17 @@ header h1 {
 
 #output-table th {
     background: #f8f9fa;
-    color: #2c3e50;
+    color: #1a1a1a;
     font-weight: 600;
     padding: 15px;
     text-align: left;
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid #e1e5e9;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 #output-table td {
     padding: 15px;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #e1e5e9;
     transition: background-color 0.3s ease;
 }
 
@@ -527,15 +537,16 @@ header h1 {
 .bracket-matchup {
     background: #f8f9fa;
     padding: 20px;
-    border-radius: 10px;
-    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    border: 2px solid #e1e5e9;
     text-align: center;
 }
 
 .bracket-matchup h3 {
-    color: #2c3e50;
+    color: #1a1a1a;
     margin-bottom: 10px;
     font-size: 1.1rem;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .bracket-matchup .date {
@@ -606,24 +617,25 @@ header h1 {
 
 .league-btn {
     padding: 12px 24px;
-    border: 2px solid #e9ecef;
+    border: 2px solid #e1e5e9;
     background: white;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #6c757d;
     font-size: 1rem;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .league-btn:hover {
-    border-color: #667eea;
-    color: #667eea;
+    border-color: #1a1a1a;
+    color: #1a1a1a;
 }
 
 .league-btn.active {
-    background: #667eea;
-    border-color: #667eea;
+    background: #1a1a1a;
+    border-color: #1a1a1a;
     color: white;
 }
 
@@ -636,23 +648,24 @@ header h1 {
 
 .mode-btn {
     padding: 12px 24px;
-    border: 2px solid #e9ecef;
+    border: 2px solid #e1e5e9;
     background: white;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #6c757d;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .mode-btn:hover {
-    border-color: #667eea;
-    color: #667eea;
+    border-color: #1a1a1a;
+    color: #1a1a1a;
 }
 
 .mode-btn.active {
-    background: #667eea;
-    border-color: #667eea;
+    background: #1a1a1a;
+    border-color: #1a1a1a;
     color: white;
 }
 
@@ -671,12 +684,13 @@ header h1 {
     padding: 15px;
     background: #f8f9fa;
     border-radius: 8px;
-    border: 2px solid #e9ecef;
+    border: 2px solid #e1e5e9;
 }
 
 .last-updated {
     font-weight: 600;
-    color: #2c3e50;
+    color: #1a1a1a;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .auto-refresh label {
@@ -684,14 +698,15 @@ header h1 {
     align-items: center;
     gap: 8px;
     font-weight: 500;
-    color: #2c3e50;
+    color: #1a1a1a;
     cursor: pointer;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .auto-refresh input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: #667eea;
+    accent-color: #1a1a1a;
 }
 
 .live-games {
@@ -703,9 +718,9 @@ header h1 {
 .live-game {
     background: white;
     padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e5e9;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -724,10 +739,11 @@ header h1 {
 }
 
 .live-game h3 {
-    color: #2c3e50;
+    color: #1a1a1a;
     margin: 0;
     font-size: 1.2rem;
     font-weight: 600;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .game-status {
@@ -827,8 +843,8 @@ header h1 {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 2px solid #e9ecef;
-    border-top: 2px solid #667eea;
+    border: 2px solid #e1e5e9;
+    border-top: 2px solid #1a1a1a;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-left: 10px;

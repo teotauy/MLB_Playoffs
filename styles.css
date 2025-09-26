@@ -143,6 +143,42 @@ header h1 {
     outline: none;
     -webkit-appearance: none;
     transition: all 0.3s ease;
+    position: relative;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        transparent 24%, 
+        #666 25%, 
+        transparent 26%, 
+        transparent 49%, 
+        #666 50%, 
+        transparent 51%, 
+        transparent 74%, 
+        #666 75%, 
+        transparent 76%, 
+        transparent 100%);
+    pointer-events: none;
+}
+
+.slider::after {
+    content: '3 2 1 0';
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    font-size: 10px;
+    color: #666;
+    text-align: center;
+    letter-spacing: 0.8em;
+    pointer-events: none;
 }
 
 .slider::-webkit-slider-thumb {
@@ -190,10 +226,16 @@ header h1 {
     margin-bottom: 4px;
 }
 
-.overall-record {
+.current-record {
     font-size: 0.8rem;
     color: #6c757d;
     font-weight: 500;
+}
+
+.simulated-record {
+    font-size: 0.8rem;
+    color: #28a745;
+    font-weight: 600;
 }
 
 /* Dropdowns */

@@ -265,10 +265,10 @@ class PlayoffSimulator {
         if (team) {
             const finalWins = team.wins + additionalWins;
             const finalLosses = team.losses + (team.gamesLeft - additionalWins);
-            const overallElement = document.getElementById(`${teamKey}-overall`);
+            const simulatedElement = document.getElementById(`${teamKey}-simulated`);
             
-            if (overallElement) {
-                overallElement.textContent = `${finalWins}-${finalLosses}`;
+            if (simulatedElement) {
+                simulatedElement.textContent = `${finalWins}-${finalLosses}`;
             }
         }
     }

@@ -82,7 +82,7 @@ header h1 {
 /* Sliders */
 .sliders-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 25px;
     margin-bottom: 30px;
 }
@@ -101,19 +101,38 @@ header h1 {
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
 }
 
-.slider-group label {
-    display: block;
-    font-weight: 600;
+.series-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.series-title {
+    font-weight: 700;
     color: #2c3e50;
-    margin-bottom: 10px;
     font-size: 1.1rem;
+    text-align: center;
+}
+
+.team-logo {
+    font-size: 1.5rem;
 }
 
 .slider-wrapper {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.team-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+    min-width: 80px;
+    text-align: center;
 }
 
 .slider {
@@ -153,18 +172,20 @@ header h1 {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.slider-value {
-    font-weight: 700;
-    color: #667eea;
-    font-size: 1.2rem;
-    min-width: 20px;
-    text-align: center;
-}
-
 .slider-info {
+    display: flex;
+    justify-content: space-between;
     font-size: 0.9rem;
     color: #6c757d;
-    font-style: italic;
+    font-weight: 500;
+}
+
+.away-wins {
+    color: #f57c00;
+}
+
+.home-wins {
+    color: #1976d2;
 }
 
 /* Dropdowns */

@@ -143,8 +143,8 @@ class PlayoffSimulator {
 
     setupSliderListeners() {
         // Remove existing listeners first to prevent duplicates
-        const allSliders = ['guardians-wins', 'redsox-wins', 'astros-wins', 'yankees-wins', 'bluejays-wins',
-                           'cubs-wins', 'padres-wins', 'mets-wins', 'brewers-wins', 'phillies-wins'];
+        const allSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'yankees-bluejays',
+                           'cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
         
         allSliders.forEach(sliderId => {
             const slider = document.getElementById(sliderId);
@@ -156,45 +156,57 @@ class PlayoffSimulator {
         });
 
         const leagueSliders = this.currentLeague === 'al' 
-            ? ['guardians-wins', 'redsox-wins', 'astros-wins', 'yankees-wins', 'bluejays-wins']
-            : ['cubs-wins', 'padres-wins', 'mets-wins', 'brewers-wins', 'phillies-wins'];
+            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'yankees-bluejays']
+            : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
             
         leagueSliders.forEach(sliderId => {
             const slider = document.getElementById(sliderId);
             if (slider) {
-                const valueDisplay = slider.parentElement.querySelector('.slider-value');
-                
                 slider.addEventListener('input', (e) => {
                     console.log('Slider changed:', sliderId, 'value:', e.target.value);
-                    valueDisplay.textContent = e.target.value;
-                    this.updateOpponentWins(sliderId, e.target.value);
+                    this.updateSeriesWins(sliderId, e.target.value);
                     this.updateSimulation();
                 });
             }
         });
     }
 
-    updateOpponentWins(sliderId, value) {
-        const opponentWins = 3 - parseInt(value);
+    updateSeriesWins(sliderId, awayWins) {
+        const awayWinsInt = parseInt(awayWins);
+        const homeWins = 3 - awayWinsInt;
         
         switch(sliderId) {
-            case 'guardians-wins':
-                document.getElementById('rangers-wins').textContent = opponentWins;
+            case 'rangers-guardians':
+                document.getElementById('rangers-wins').textContent = awayWinsInt;
+                document.getElementById('guardians-wins').textContent = homeWins;
                 break;
-            case 'redsox-wins':
-                document.getElementById('tigers-wins').textContent = opponentWins;
+            case 'tigers-redsox':
+                document.getElementById('tigers-wins').textContent = awayWinsInt;
+                document.getElementById('redsox-wins').textContent = homeWins;
                 break;
-            case 'astros-wins':
-                document.getElementById('angels-wins').textContent = opponentWins;
+            case 'astros-angels':
+                document.getElementById('astros-wins').textContent = awayWinsInt;
+                document.getElementById('angels-wins').textContent = homeWins;
                 break;
-            case 'cubs-wins':
-                document.getElementById('cardinals-wins').textContent = opponentWins;
+            case 'yankees-bluejays':
+                document.getElementById('yankees-wins').textContent = awayWinsInt;
+                document.getElementById('bluejays-wins').textContent = homeWins;
                 break;
-            case 'padres-wins':
-                document.getElementById('diamondbacks-wins').textContent = opponentWins;
+            case 'cubs-cardinals':
+                document.getElementById('cubs-wins').textContent = awayWinsInt;
+                document.getElementById('cardinals-wins').textContent = homeWins;
                 break;
-            case 'mets-wins':
-                document.getElementById('marlins-wins').textContent = opponentWins;
+            case 'diamondbacks-padres':
+                document.getElementById('diamondbacks-wins').textContent = awayWinsInt;
+                document.getElementById('padres-wins').textContent = homeWins;
+                break;
+            case 'mets-marlins':
+                document.getElementById('mets-wins').textContent = awayWinsInt;
+                document.getElementById('marlins-wins').textContent = homeWins;
+                break;
+            case 'reds-brewers':
+                document.getElementById('reds-wins').textContent = awayWinsInt;
+                document.getElementById('brewers-wins').textContent = homeWins;
                 break;
         }
     }
@@ -262,20 +274,42 @@ class PlayoffSimulator {
 
     getSliderValues() {
         if (this.currentLeague === 'al') {
+            // Get away team wins from sliders, calculate home team wins
+            const rangersWins = parseInt(document.getElementById('rangers-guardians').value);
+            const tigersWins = parseInt(document.getElementById('tigers-redsox').value);
+            const astrosWins = parseInt(document.getElementById('astros-angels').value);
+            const yankeesWins = parseInt(document.getElementById('yankees-bluejays').value);
+            
             return {
-                guardians: parseInt(document.getElementById('guardians-wins').value),
-                redsox: parseInt(document.getElementById('redsox-wins').value),
-                astros: parseInt(document.getElementById('astros-wins').value),
-                yankees: parseInt(document.getElementById('yankees-wins').value),
-                bluejays: parseInt(document.getElementById('bluejays-wins').value)
+                // Away teams get their slider value
+                rangers: rangersWins,
+                tigers: tigersWins,
+                astros: astrosWins,
+                yankees: yankeesWins,
+                // Home teams get 3 minus away team wins
+                guardians: 3 - rangersWins,
+                redsox: 3 - tigersWins,
+                angels: 3 - astrosWins,
+                bluejays: 3 - yankeesWins
             };
         } else {
+            // Get away team wins from sliders, calculate home team wins
+            const cubsWins = parseInt(document.getElementById('cubs-cardinals').value);
+            const diamondbacksWins = parseInt(document.getElementById('diamondbacks-padres').value);
+            const metsWins = parseInt(document.getElementById('mets-marlins').value);
+            const redsWins = parseInt(document.getElementById('reds-brewers').value);
+            
             return {
-                cubs: parseInt(document.getElementById('cubs-wins').value),
-                padres: parseInt(document.getElementById('padres-wins').value),
-                mets: parseInt(document.getElementById('mets-wins').value),
-                brewers: parseInt(document.getElementById('brewers-wins').value),
-                phillies: parseInt(document.getElementById('phillies-wins').value)
+                // Away teams get their slider value
+                cubs: cubsWins,
+                diamondbacks: diamondbacksWins,
+                mets: metsWins,
+                reds: redsWins,
+                // Home teams get 3 minus away team wins
+                cardinals: 3 - cubsWins,
+                padres: 3 - diamondbacksWins,
+                marlins: 3 - metsWins,
+                brewers: 3 - redsWins
             };
         }
     }
@@ -284,7 +318,7 @@ class PlayoffSimulator {
         const final = {};
         const currentLeagueStandings = this.currentStandings[this.currentLeague];
         
-        // Calculate final records
+        // Calculate final records for each team
         Object.keys(currentLeagueStandings).forEach(team => {
             const current = currentLeagueStandings[team];
             const additionalWins = sliderValues[team] || 0;
@@ -603,25 +637,9 @@ class PlayoffSimulator {
     }
 
     updateRecordDisplays(sliderValues) {
-        if (this.currentLeague === 'al') {
-            // Update Yankees and Blue Jays record displays
-            const yankeesRecord = this.currentStandings.al.yankees.wins + sliderValues.yankees;
-            const yankeesLosses = this.currentStandings.al.yankees.losses + (3 - sliderValues.yankees);
-            document.getElementById('yankees-record').textContent = `${yankeesRecord}-${yankeesLosses}`;
-
-            const bluejaysRecord = this.currentStandings.al.bluejays.wins + sliderValues.bluejays;
-            const bluejaysLosses = this.currentStandings.al.bluejays.losses + (3 - sliderValues.bluejays);
-            document.getElementById('bluejays-record').textContent = `${bluejaysRecord}-${bluejaysLosses}`;
-        } else {
-            // Update Brewers and Phillies record displays
-            const brewersRecord = this.currentStandings.nl.brewers.wins + sliderValues.brewers;
-            const brewersLosses = this.currentStandings.nl.brewers.losses + (3 - sliderValues.brewers);
-            document.getElementById('brewers-record').textContent = `${brewersRecord}-${brewersLosses}`;
-
-            const philliesRecord = this.currentStandings.nl.phillies.wins + sliderValues.phillies;
-            const philliesLosses = this.currentStandings.nl.phillies.losses + (3 - sliderValues.phillies);
-            document.getElementById('phillies-record').textContent = `${philliesRecord}-${philliesLosses}`;
-        }
+        // This method is no longer needed since we removed the record display elements
+        // The final records are now shown in the output table
+        return;
     }
 
     // Live Data Methods

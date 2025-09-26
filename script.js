@@ -13,7 +13,9 @@ class PlayoffSimulator {
                 guardians: { wins: 86, losses: 73, gamesLeft: 3 },
                 tigers: { wins: 86, losses: 73, gamesLeft: 3 },
                 redsox: { wins: 87, losses: 72, gamesLeft: 3 },
-                astros: { wins: 85, losses: 74, gamesLeft: 3 }
+                astros: { wins: 85, losses: 74, gamesLeft: 3 },
+                orioles: { wins: 75, losses: 84, gamesLeft: 3 },
+                rays: { wins: 77, losses: 82, gamesLeft: 3 }
             },
             // National League
             nl: {
@@ -105,7 +107,7 @@ class PlayoffSimulator {
 
     initializeOverallRecords() {
         // Initialize all overall records based on current slider positions
-        const alSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'yankees-bluejays'];
+        const alSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays'];
         const nlSliders = ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
         
         // Initialize AL records
@@ -166,7 +168,7 @@ class PlayoffSimulator {
 
     setupSliderListeners() {
         // Remove existing listeners first to prevent duplicates
-        const allSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'yankees-bluejays',
+        const allSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays',
                            'cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
         
         allSliders.forEach(sliderId => {
@@ -179,7 +181,7 @@ class PlayoffSimulator {
         });
 
         const leagueSliders = this.currentLeague === 'al' 
-            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'yankees-bluejays']
+            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays']
             : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
             
         leagueSliders.forEach(sliderId => {
@@ -217,10 +219,16 @@ class PlayoffSimulator {
                 this.updateOverallRecord('astros', awayWinsInt);
                 this.updateOverallRecord('angels', homeWins);
                 break;
-            case 'yankees-bluejays':
-                document.getElementById('yankees-wins').textContent = awayWinsInt;
+            case 'orioles-yankees':
+                document.getElementById('orioles-wins').textContent = awayWinsInt;
+                document.getElementById('yankees-wins').textContent = homeWins;
+                this.updateOverallRecord('orioles', awayWinsInt);
+                this.updateOverallRecord('yankees', homeWins);
+                break;
+            case 'rays-bluejays':
+                document.getElementById('rays-wins').textContent = awayWinsInt;
                 document.getElementById('bluejays-wins').textContent = homeWins;
-                this.updateOverallRecord('yankees', awayWinsInt);
+                this.updateOverallRecord('rays', awayWinsInt);
                 this.updateOverallRecord('bluejays', homeWins);
                 break;
             case 'cubs-cardinals':
@@ -332,19 +340,22 @@ class PlayoffSimulator {
             const rangersWins = parseInt(document.getElementById('rangers-guardians').value);
             const tigersWins = parseInt(document.getElementById('tigers-redsox').value);
             const astrosWins = parseInt(document.getElementById('astros-angels').value);
-            const yankeesWins = parseInt(document.getElementById('yankees-bluejays').value);
+            const oriolesWins = parseInt(document.getElementById('orioles-yankees').value);
+            const raysWins = parseInt(document.getElementById('rays-bluejays').value);
             
             return {
                 // Away teams get their slider value
                 rangers: rangersWins,
                 tigers: tigersWins,
                 astros: astrosWins,
-                yankees: yankeesWins,
+                orioles: oriolesWins,
+                rays: raysWins,
                 // Home teams get 3 minus away team wins
                 guardians: 3 - rangersWins,
                 redsox: 3 - tigersWins,
                 angels: 3 - astrosWins,
-                bluejays: 3 - yankeesWins
+                yankees: 3 - oriolesWins,
+                bluejays: 3 - raysWins
             };
         } else {
             // Get away team wins from sliders, calculate home team wins
@@ -679,6 +690,8 @@ class PlayoffSimulator {
             'tigers': 'Tigers',
             'redsox': 'Red Sox',
             'astros': 'Astros',
+            'orioles': 'Orioles',
+            'rays': 'Rays',
             // NL Teams
             'brewers': 'Brewers',
             'phillies': 'Phillies',

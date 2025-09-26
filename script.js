@@ -142,6 +142,19 @@ class PlayoffSimulator {
     }
 
     setupSliderListeners() {
+        // Remove existing listeners first to prevent duplicates
+        const allSliders = ['guardians-wins', 'redsox-wins', 'astros-wins', 'yankees-wins', 'bluejays-wins',
+                           'cubs-wins', 'padres-wins', 'mets-wins', 'brewers-wins', 'phillies-wins'];
+        
+        allSliders.forEach(sliderId => {
+            const slider = document.getElementById(sliderId);
+            if (slider) {
+                // Clone the element to remove all event listeners
+                const newSlider = slider.cloneNode(true);
+                slider.parentNode.replaceChild(newSlider, slider);
+            }
+        });
+
         const leagueSliders = this.currentLeague === 'al' 
             ? ['guardians-wins', 'redsox-wins', 'astros-wins', 'yankees-wins', 'bluejays-wins']
             : ['cubs-wins', 'padres-wins', 'mets-wins', 'brewers-wins', 'phillies-wins'];
@@ -152,6 +165,7 @@ class PlayoffSimulator {
                 const valueDisplay = slider.parentElement.querySelector('.slider-value');
                 
                 slider.addEventListener('input', (e) => {
+                    console.log('Slider changed:', sliderId, 'value:', e.target.value);
                     valueDisplay.textContent = e.target.value;
                     this.updateOpponentWins(sliderId, e.target.value);
                     this.updateSimulation();
@@ -220,11 +234,18 @@ class PlayoffSimulator {
     }
 
     updateSimulation() {
-        if (this.currentMode !== 'simulation') return;
+        console.log('updateSimulation called, currentMode:', this.currentMode);
+        if (this.currentMode !== 'simulation') {
+            console.log('Not in simulation mode, returning early');
+            return;
+        }
         
         const sliderValues = this.getSliderValues();
+        console.log('Slider values:', sliderValues);
         const finalStandings = this.calculateFinalStandings(sliderValues);
+        console.log('Final standings:', finalStandings);
         const playoffPicture = this.determinePlayoffPicture(finalStandings);
+        console.log('Playoff picture:', playoffPicture);
         
         this.updateOutputTable(finalStandings, playoffPicture);
         this.updateBracket(playoffPicture);

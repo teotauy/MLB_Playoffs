@@ -802,8 +802,7 @@ class PlayoffSimulator {
         try {
             this.updateLastUpdated('Loading...');
             
-            // For now, we'll simulate live data since we need to implement the actual API calls
-            // In a real implementation, you would fetch from MLB API here
+            // Try to fetch live data from MLB API, with fallback to simulated data
             const liveData = await this.fetchLiveGameData();
             
             this.displayLiveGames(liveData);
@@ -812,8 +811,11 @@ class PlayoffSimulator {
             
         } catch (error) {
             console.error('Error loading live data:', error);
-            this.displayError('Failed to load live game data. Please try again.');
-            this.updateLastUpdated('Error loading data');
+            // Fallback to simulated data instead of showing error
+            const fallbackData = this.getFallbackData();
+            this.displayLiveGames(fallbackData);
+            this.updatePlayoffPictureFromLiveData(fallbackData);
+            this.updateLastUpdated('Using simulated data (API unavailable)');
         }
     }
 
@@ -876,28 +878,36 @@ class PlayoffSimulator {
     processScheduleData(scheduleData) {
         const games = [];
         
-        if (scheduleData.dates && scheduleData.dates.length > 0) {
-            const todaysDate = scheduleData.dates[0];
-            if (todaysDate.games) {
-                todaysDate.games.forEach(game => {
-                    // Only include games for teams we're tracking
-                    const homeTeamKey = this.getTeamKey(game.teams.home.team.name);
-                    const awayTeamKey = this.getTeamKey(game.teams.away.team.name);
-                    
-                    if (homeTeamKey && awayTeamKey) {
-                        games.push({
-                            id: game.gamePk.toString(),
-                            homeTeam: game.teams.home.team.name,
-                            awayTeam: game.teams.away.team.name,
-                            homeScore: game.teams.home.score || 0,
-                            awayScore: game.teams.away.score || 0,
-                            status: this.getGameStatus(game.status.detailedState),
-                            inning: game.linescore ? game.linescore.currentInning : '',
-                            time: this.formatGameTime(game.gameDate)
-                        });
-                    }
-                });
+        try {
+            if (scheduleData && scheduleData.dates && scheduleData.dates.length > 0) {
+                const todaysDate = scheduleData.dates[0];
+                if (todaysDate && todaysDate.games) {
+                    todaysDate.games.forEach(game => {
+                        try {
+                            // Only include games for teams we're tracking
+                            const homeTeamKey = this.getTeamKey(game.teams?.home?.team?.name);
+                            const awayTeamKey = this.getTeamKey(game.teams?.away?.team?.name);
+                            
+                            if (homeTeamKey && awayTeamKey) {
+                                games.push({
+                                    id: game.gamePk?.toString() || 'unknown',
+                                    homeTeam: game.teams.home.team.name,
+                                    awayTeam: game.teams.away.team.name,
+                                    homeScore: game.teams.home.score || 0,
+                                    awayScore: game.teams.away.score || 0,
+                                    status: this.getGameStatus(game.status?.detailedState),
+                                    inning: game.linescore?.currentInning || '',
+                                    time: this.formatGameTime(game.gameDate)
+                                });
+                            }
+                        } catch (gameError) {
+                            console.warn('Error processing individual game:', gameError);
+                        }
+                    });
+                }
             }
+        } catch (error) {
+            console.warn('Error processing schedule data:', error);
         }
 
         return games;
@@ -907,6 +917,7 @@ class PlayoffSimulator {
         const teamMap = {
             'New York Yankees': 'yankees',
             'Toronto Blue Jays': 'bluejays',
+            'Seattle Mariners': 'mariners',
             'Cleveland Guardians': 'guardians',
             'Detroit Tigers': 'tigers',
             'Boston Red Sox': 'redsox',

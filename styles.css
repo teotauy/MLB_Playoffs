@@ -164,6 +164,86 @@ header h1 {
     font-size: 0.9rem;
 }
 
+/* Permutation Table */
+.permutation-table-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.permutation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.permutation-table th {
+    background: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 15px 12px;
+    text-align: center;
+    border-bottom: 2px solid #dee2e6;
+    position: sticky;
+    top: 0;
+}
+
+.permutation-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.permutation-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.permutation-table .team-name {
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.permutation-table .percentage {
+    font-weight: 600;
+    color: #495057;
+}
+
+.permutation-table .percentage.high {
+    color: #28a745;
+}
+
+.permutation-table .percentage.medium {
+    color: #ffc107;
+}
+
+.permutation-table .percentage.low {
+    color: #dc3545;
+}
+
+.permutation-info {
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.permutation-info h4 {
+    margin: 0 0 10px 0;
+    color: #667eea;
+}
+
+.permutation-info p {
+    margin: 5px 0;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
 .intro-section ul {
     margin: 15px 0;
     padding-left: 20px;
@@ -621,101 +701,118 @@ header h1 {
 }
 
 .live-game {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    border: 2px solid #e9ecef;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .live-game:hover {
-    border-color: #667eea;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .live-game h3 {
     color: #2c3e50;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .game-status {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    gap: 10px;
 }
 
-.game-status .status {
-    padding: 4px 12px;
+.live-badge {
+    background: #dc3545;
+    color: white;
+    padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
 }
 
-.game-status .status.live {
-    background: #dc3545;
-    color: white;
-}
-
-.game-status .status.final {
-    background: #28a745;
-    color: white;
-}
-
-.game-status .status.scheduled {
-    background: #6c757d;
-    color: white;
-}
-
 .game-status .time {
     color: #6c757d;
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .game-score {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 15px;
+    justify-content: space-between;
+    margin-bottom: 15px;
 }
 
 .team-score {
-    flex: 1;
     text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: 600;
-}
-
-.team-score.home {
-    background: #e3f2fd;
-    color: #1976d2;
+    flex: 1;
+    padding: 15px;
+    border-radius: 12px;
+    position: relative;
 }
 
 .team-score.away {
-    background: #fff3e0;
-    color: #f57c00;
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.team-score.home {
+    background: rgba(13, 110, 253, 0.1);
+    border: 1px solid rgba(13, 110, 253, 0.3);
 }
 
 .team-score .team-name {
     font-size: 0.9rem;
-    margin-bottom: 5px;
+    color: #495057;
+    margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .team-score .score {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    line-height: 1;
+}
+
+.team-score.away .score {
+    color: #fd7e14;
+}
+
+.team-score.home .score {
+    color: #0d6efd;
+}
+
+.vs {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin: 0 20px;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 .game-details {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #e9ecef;
-    font-size: 0.9rem;
+    text-align: center;
     color: #6c757d;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    font-weight: 500;
 }
 
 /* Loading states */

@@ -111,14 +111,8 @@ class PlayoffSimulator {
             }
         });
 
-        // Chart event listeners
-        document.getElementById('generate-permutations').addEventListener('click', () => {
-            this.generatePermutationChart();
-        });
-
-        document.getElementById('clear-chart').addEventListener('click', () => {
-            this.clearPermutationChart();
-        });
+        // Initialize permutation table
+        this.generatePermutationTable();
     }
 
     initializeOverallRecords() {
@@ -943,10 +937,12 @@ class PlayoffSimulator {
                              game.status === 'Live' ? 'Live' : 'Scheduled';
             
             gameDiv.innerHTML = `
-                <h3>${game.awayTeam} @ ${game.homeTeam}</h3>
-                <div class="game-status">
-                    <span class="status ${statusClass}">${statusText}</span>
-                    <span class="time">${game.time}</span>
+                <div class="game-header">
+                    <h3>${game.awayTeam} @ ${game.homeTeam}</h3>
+                    <div class="game-status">
+                        ${game.status === 'Live' ? '<span class="live-badge">LIVE</span>' : ''}
+                        <span class="time">${game.time}</span>
+                    </div>
                 </div>
                 <div class="game-score">
                     <div class="team-score away">
@@ -959,7 +955,7 @@ class PlayoffSimulator {
                         <div class="score">${game.homeScore}</div>
                     </div>
                 </div>
-                ${game.status === 'Live' ? `<div class="game-details">${game.inning} inning</div>` : ''}
+                ${game.status === 'Live' ? `<div class="game-details">${game.inning}${game.inning ? ' inning' : ''}</div>` : ''}
             `;
             
             container.appendChild(gameDiv);
@@ -1019,11 +1015,12 @@ class PlayoffSimulator {
         container.innerHTML = `<div class="error">${message}</div>`;
     }
 
-    // Permutation Chart Methods
-    generatePermutationChart() {
+    // Static Permutation Table Methods
+    generatePermutationTable() {
         const permutations = this.calculateAllPermutations();
-        this.createPermutationChart(permutations);
-        this.displayChartInfo(permutations);
+        const teamPercentages = this.calculateTeamPercentages(permutations);
+        this.displayPermutationTable(teamPercentages);
+        this.displayPermutationInfo(permutations);
     }
 
     calculateAllPermutations() {
@@ -1051,174 +1048,135 @@ class PlayoffSimulator {
             const finalStandings = this.calculateFinalStandings(sliderValues);
             const playoffPicture = this.determinePlayoffPicture(finalStandings);
             
-            // Count playoff teams
-            const playoffTeams = this.countPlayoffTeams(playoffPicture);
-            
             permutations.push({
                 id: i,
                 sliderValues: sliderValues,
                 finalStandings: finalStandings,
-                playoffPicture: playoffPicture,
-                playoffTeams: playoffTeams
+                playoffPicture: playoffPicture
             });
         }
 
         return permutations;
     }
 
-    countPlayoffTeams(playoffPicture) {
-        if (this.currentLeague === 'al') {
-            return [playoffPicture.aleastWinner, playoffPicture.alcentralWinner, 
-                   playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3]
-                   .filter(team => team).length;
-        } else {
-            return [playoffPicture.nlTopSeed, playoffPicture.nlSecondSeed, playoffPicture.nlThirdSeed,
-                   playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3]
-                   .filter(team => team).length;
-        }
-    }
-
-    createPermutationChart(permutations) {
-        const ctx = document.getElementById('permutation-chart').getContext('2d');
+    calculateTeamPercentages(permutations) {
+        const teamCounts = {};
+        const totalPermutations = permutations.length;
         
-        // Destroy existing chart if it exists
-        if (this.permutationChart) {
-            this.permutationChart.destroy();
-        }
-
-        // Group permutations by playoff team count
-        const groupedData = {};
-        permutations.forEach(perm => {
-            const count = perm.playoffTeams;
-            if (!groupedData[count]) {
-                groupedData[count] = 0;
-            }
-            groupedData[count]++;
-        });
-
-        const labels = Object.keys(groupedData).sort((a, b) => parseInt(a) - parseInt(b));
-        const data = labels.map(label => groupedData[label]);
-
-        this.permutationChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels.map(label => `${label} Playoff Teams`),
-                datasets: [{
-                    label: 'Number of Scenarios',
-                    data: data,
-                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: `Playoff Scenarios Distribution - ${this.currentLeague.toUpperCase()}`,
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        }
-                    },
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        },
-                        title: {
-                            display: true,
-                            text: 'Number of Scenarios'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Playoff Teams'
-                        }
-                    }
-                },
-                onClick: (event, elements) => {
-                    if (elements.length > 0) {
-                        const index = elements[0].index;
-                        const playoffCount = labels[index];
-                        this.showDetailedScenarios(permutations, parseInt(playoffCount));
-                    }
-                }
-            }
-        });
-    }
-
-    showDetailedScenarios(permutations, playoffCount) {
-        const filteredPerms = permutations.filter(perm => perm.playoffTeams === playoffCount);
-        const infoDiv = document.getElementById('chart-info');
-        
-        infoDiv.innerHTML = `
-            <h4>Scenarios with ${playoffCount} Playoff Teams (${filteredPerms.length} total)</h4>
-            <p>Click on a bar to see detailed scenarios for that playoff team count.</p>
-            <div style="max-height: 200px; overflow-y: auto;">
-                ${filteredPerms.slice(0, 10).map(perm => this.formatScenario(perm)).join('')}
-                ${filteredPerms.length > 10 ? `<p><em>... and ${filteredPerms.length - 10} more scenarios</em></p>` : ''}
-            </div>
-        `;
-    }
-
-    formatScenario(perm) {
-        const teams = this.currentLeague === 'al' 
-            ? ['Guardians', 'Tigers', 'Red Sox', 'Astros', 'Yankees', 'Blue Jays']
-            : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets'];
-        
+        // Initialize team counts
         const teamKeys = this.currentLeague === 'al' 
             ? ['guardians', 'tigers', 'redsox', 'astros', 'yankees', 'bluejays']
             : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets'];
 
-        const records = teamKeys.map(key => {
-            const team = perm.finalStandings[key];
-            return team ? `${key}: ${team.wins}-${team.losses}` : '';
-        }).filter(record => record).join(', ');
-
-        return `<div style="margin: 5px 0; padding: 8px; background: rgba(102, 126, 234, 0.1); border-radius: 4px; font-size: 0.85rem;">
-            <strong>Scenario ${perm.id + 1}:</strong> ${records}
-        </div>`;
-    }
-
-    displayChartInfo(permutations) {
-        const infoDiv = document.getElementById('chart-info');
-        const totalPermutations = permutations.length;
-        const playoffCounts = {};
-        
-        permutations.forEach(perm => {
-            const count = perm.playoffTeams;
-            playoffCounts[count] = (playoffCounts[count] || 0) + 1;
+        teamKeys.forEach(team => {
+            teamCounts[team] = {
+                '1-seed': 0,
+                '2-seed': 0,
+                '3-seed': 0,
+                'wc1': 0,
+                'wc2': 0,
+                'wc3': 0,
+                'eliminated': 0
+            };
         });
 
-        const mostCommon = Object.keys(playoffCounts).reduce((a, b) => 
-            playoffCounts[a] > playoffCounts[b] ? a : b
-        );
+        // Count occurrences of each team in each position
+        permutations.forEach(perm => {
+            const playoffPicture = perm.playoffPicture;
+            
+            if (this.currentLeague === 'al') {
+                // AL positions
+                if (playoffPicture.aleastWinner) teamCounts[playoffPicture.aleastWinner]['1-seed']++;
+                if (playoffPicture.alcentralWinner) teamCounts[playoffPicture.alcentralWinner]['2-seed']++;
+                if (playoffPicture.wc1) teamCounts[playoffPicture.wc1]['3-seed']++;
+                if (playoffPicture.wc2) teamCounts[playoffPicture.wc2]['wc1']++;
+                if (playoffPicture.wc3) teamCounts[playoffPicture.wc3]['wc2']++;
+                
+                // Check for eliminated teams
+                teamKeys.forEach(team => {
+                    if (![playoffPicture.aleastWinner, playoffPicture.alcentralWinner, 
+                          playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3].includes(team)) {
+                        teamCounts[team]['eliminated']++;
+                    }
+                });
+            } else {
+                // NL positions
+                if (playoffPicture.nlTopSeed) teamCounts[playoffPicture.nlTopSeed]['1-seed']++;
+                if (playoffPicture.nlSecondSeed) teamCounts[playoffPicture.nlSecondSeed]['2-seed']++;
+                if (playoffPicture.nlThirdSeed) teamCounts[playoffPicture.nlThirdSeed]['3-seed']++;
+                if (playoffPicture.wc1) teamCounts[playoffPicture.wc1]['wc1']++;
+                if (playoffPicture.wc2) teamCounts[playoffPicture.wc2]['wc2']++;
+                if (playoffPicture.wc3) teamCounts[playoffPicture.wc3]['wc3']++;
+                
+                // Check for eliminated teams
+                teamKeys.forEach(team => {
+                    if (![playoffPicture.nlTopSeed, playoffPicture.nlSecondSeed, playoffPicture.nlThirdSeed,
+                          playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3].includes(team)) {
+                        teamCounts[team]['eliminated']++;
+                    }
+                });
+            }
+        });
 
+        // Convert counts to percentages
+        const teamPercentages = {};
+        teamKeys.forEach(team => {
+            teamPercentages[team] = {};
+            Object.keys(teamCounts[team]).forEach(position => {
+                const percentage = (teamCounts[team][position] / totalPermutations) * 100;
+                teamPercentages[team][position] = percentage;
+            });
+        });
+
+        return teamPercentages;
+    }
+
+    displayPermutationTable(teamPercentages) {
+        const tbody = document.getElementById('permutation-tbody');
+        tbody.innerHTML = '';
+
+        const teamKeys = this.currentLeague === 'al' 
+            ? ['guardians', 'tigers', 'redsox', 'astros', 'yankees', 'bluejays']
+            : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets'];
+
+        const teamNames = this.currentLeague === 'al' 
+            ? ['Guardians', 'Tigers', 'Red Sox', 'Astros', 'Yankees', 'Blue Jays']
+            : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets'];
+
+        teamKeys.forEach((teamKey, index) => {
+            const teamName = teamNames[index];
+            const percentages = teamPercentages[teamKey];
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="team-name">${teamName}</td>
+                <td class="percentage ${this.getPercentageClass(percentages['1-seed'])}">${percentages['1-seed'].toFixed(1)}%</td>
+                <td class="percentage ${this.getPercentageClass(percentages['2-seed'])}">${percentages['2-seed'].toFixed(1)}%</td>
+                <td class="percentage ${this.getPercentageClass(percentages['3-seed'])}">${percentages['3-seed'].toFixed(1)}%</td>
+                <td class="percentage ${this.getPercentageClass(percentages['wc1'])}">${percentages['wc1'].toFixed(1)}%</td>
+                <td class="percentage ${this.getPercentageClass(percentages['wc2'])}">${percentages['wc2'].toFixed(1)}%</td>
+                <td class="percentage ${this.getPercentageClass(percentages['wc3'])}">${percentages['wc3'].toFixed(1)}%</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    getPercentageClass(percentage) {
+        if (percentage >= 50) return 'high';
+        if (percentage >= 25) return 'medium';
+        return 'low';
+    }
+
+    displayPermutationInfo(permutations) {
+        const infoDiv = document.getElementById('permutation-info');
+        const totalPermutations = permutations.length;
+        
         infoDiv.innerHTML = `
             <h4>Permutation Analysis</h4>
             <p><strong>Total Scenarios:</strong> ${totalPermutations.toLocaleString()}</p>
-            <p><strong>Most Common Outcome:</strong> ${mostCommon} playoff teams (${playoffCounts[mostCommon]} scenarios)</p>
-            <p><strong>Click on any bar</strong> to see detailed scenarios for that playoff team count.</p>
+            <p><strong>Based on:</strong> ${this.currentLeague === 'al' ? '5 series with 4 possible outcomes each (0-3 wins)' : '4 series with 4 possible outcomes each (0-3 wins)'}</p>
+            <p><strong>Calculation:</strong> ${this.currentLeague === 'al' ? '4^5 = 1,024 scenarios' : '4^4 = 256 scenarios'}</p>
         `;
-    }
-
-    clearPermutationChart() {
-        if (this.permutationChart) {
-            this.permutationChart.destroy();
-            this.permutationChart = null;
-        }
-        document.getElementById('chart-info').innerHTML = '';
     }
 }
 

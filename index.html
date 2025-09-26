@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🏟️ AL Playoff Permutation Simulator</h1>
+            <h1>🏟️ MLB Playoff Picture</h1>
             <p class="subtitle">Explore how the final 3 games affect playoff seeding</p>
         </header>
 
@@ -341,16 +341,27 @@
 
         <div class="permutation-section" id="permutation-section">
             <h2>📊 Playoff Permutations Chart</h2>
-            <p class="permutation-description">Explore all possible playoff scenarios based on different game outcomes</p>
-            <div class="chart-controls">
-                <button id="generate-permutations" class="chart-btn">Generate All Permutations</button>
-                <button id="clear-chart" class="chart-btn secondary">Clear Chart</button>
+            <p class="permutation-description">Percentage chance of each team reaching each playoff position based on all possible series outcomes</p>
+            <div class="permutation-table-container">
+                <table class="permutation-table" id="permutation-table">
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>1 Seed</th>
+                            <th>2 Seed</th>
+                            <th>3 Seed</th>
+                            <th>Wild Card 1</th>
+                            <th>Wild Card 2</th>
+                            <th>Wild Card 3</th>
+                        </tr>
+                    </thead>
+                    <tbody id="permutation-tbody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
             </div>
-            <div class="chart-container" id="chart-container">
-                <canvas id="permutation-chart" width="800" height="400"></canvas>
-            </div>
-            <div class="chart-info" id="chart-info">
-                <!-- Chart information will be displayed here -->
+            <div class="permutation-info" id="permutation-info">
+                <!-- Permutation information will be displayed here -->
             </div>
         </div>
     </div>

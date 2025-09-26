@@ -198,9 +198,9 @@ class PlayoffSimulator {
 
     updateSeriesWins(sliderId, sliderValue) {
         const sliderPos = parseInt(sliderValue);
-        // Slider position 0 = home team sweeps (3 wins), position 3 = away team sweeps (3 wins)
-        const homeWins = 3 - sliderPos;
-        const awayWins = sliderPos;
+        // Slider position 0 = away team sweeps (3 wins), position 3 = home team sweeps (3 wins)
+        const awayWins = 3 - sliderPos;
+        const homeWins = sliderPos;
         
         switch(sliderId) {
             case 'rangers-guardians':
@@ -346,18 +346,18 @@ class PlayoffSimulator {
             const raysSlider = parseInt(document.getElementById('rays-bluejays').value);
             
             return {
-                // Away teams get slider position value
-                rangers: rangersSlider,
-                tigers: tigersSlider,
-                astros: astrosSlider,
-                orioles: oriolesSlider,
-                rays: raysSlider,
-                // Home teams get 3 minus slider position
-                guardians: 3 - rangersSlider,
-                redsox: 3 - tigersSlider,
-                angels: 3 - astrosSlider,
-                yankees: 3 - oriolesSlider,
-                bluejays: 3 - raysSlider
+                // Away teams get 3 minus slider position
+                rangers: 3 - rangersSlider,
+                tigers: 3 - tigersSlider,
+                astros: 3 - astrosSlider,
+                orioles: 3 - oriolesSlider,
+                rays: 3 - raysSlider,
+                // Home teams get slider position value
+                guardians: rangersSlider,
+                redsox: tigersSlider,
+                angels: astrosSlider,
+                yankees: oriolesSlider,
+                bluejays: raysSlider
             };
         } else {
             // Get away team wins from sliders, calculate home team wins
@@ -367,16 +367,16 @@ class PlayoffSimulator {
             const redsWins = parseInt(document.getElementById('reds-brewers').value);
             
             return {
-                // Away teams get their slider value
-                cubs: cubsWins,
-                diamondbacks: diamondbacksWins,
-                mets: metsWins,
-                reds: redsWins,
-                // Home teams get 3 minus away team wins
-                cardinals: 3 - cubsWins,
-                padres: 3 - diamondbacksWins,
-                marlins: 3 - metsWins,
-                brewers: 3 - redsWins
+                // Away teams get 3 minus slider value
+                cubs: 3 - cubsWins,
+                diamondbacks: 3 - diamondbacksWins,
+                mets: 3 - metsWins,
+                reds: 3 - redsWins,
+                // Home teams get slider value
+                cardinals: cubsWins,
+                padres: diamondbacksWins,
+                marlins: metsWins,
+                brewers: redsWins
             };
         }
     }

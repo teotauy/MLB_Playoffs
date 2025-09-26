@@ -767,6 +767,34 @@ class PlayoffSimulator {
         return names[teamKey] || teamKey;
     }
 
+    getTeamEmoji(teamKey) {
+        const emojis = {
+            // AL Teams
+            'yankees': '🗽',      // Statue of Liberty (NYC)
+            'bluejays': '🐦',     // Blue Jay bird
+            'guardians': '🛡️',    // Shield (Guardians)
+            'tigers': '🐅',       // Tiger
+            'redsox': '🧦',       // Red sock
+            'astros': '🚀',       // Rocket (space theme)
+            'orioles': '🦜',      // Oriole bird
+            'rays': '☀️',         // Sun ray
+            'rangers': '🤠',      // Cowboy hat (Texas Rangers)
+            'angels': '👼',       // Angel
+            // NL Teams
+            'brewers': '🍺',      // Beer (Brewers)
+            'phillies': '🔔',     // Liberty Bell (Philadelphia)
+            'dodgers': '🌴',      // Palm tree (LA)
+            'cubs': '🐻',         // Bear cub
+            'padres': '⛪',       // Church (Padres = Fathers)
+            'mets': '🌆',         // City skyline (NYC)
+            'cardinals': '🐦',    // Cardinal bird
+            'diamondbacks': '🐍', // Snake (Diamondback rattlesnake)
+            'marlins': '🐟',      // Fish (Marlin)
+            'reds': '🔴'          // Red circle
+        };
+        return emojis[teamKey] || '🏟️';
+    }
+
     updateRecordDisplays(sliderValues) {
         // This method is no longer needed since we removed the record display elements
         // The final records are now shown in the output table

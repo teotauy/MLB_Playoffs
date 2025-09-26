@@ -669,22 +669,14 @@ class PlayoffSimulator {
         container.innerHTML = '';
 
         if (this.currentLeague === 'al') {
-            // AL Wild Card Series
+            // AL Wild Card Series (only WC teams play)
             const wcSeries = [
                 {
                     awayTeam: this.getTeamName(playoffPicture.wc3),
-                    homeTeam: this.getTeamName(playoffPicture.aleastWinner),
+                    homeTeam: this.getTeamName(playoffPicture.wc2),
                     awaySeed: 'WC3',
-                    homeSeed: '1',
+                    homeSeed: 'WC2',
                     date: 'Sep 30 - Oct 2',
-                    note: 'Wild Card Series'
-                },
-                {
-                    awayTeam: this.getTeamName(playoffPicture.wc2),
-                    homeTeam: this.getTeamName(playoffPicture.alwestWinner),
-                    awaySeed: 'WC2',
-                    homeSeed: '2',
-                    date: 'Sep 30 - Oct 2', 
                     note: 'Wild Card Series'
                 }
             ];
@@ -700,32 +692,25 @@ class PlayoffSimulator {
                 container.appendChild(matchupDiv);
             });
 
-            // ALDS placeholder
+            // ALDS with byes
             const aldsDiv = document.createElement('div');
             aldsDiv.className = 'bracket-matchup';
             aldsDiv.innerHTML = `
                 <h3>ALDS Matchups</h3>
                 <div class="date">Oct 5-10</div>
-                <div class="note">Based on WC winners</div>
+                <div class="note">#1 ${this.getTeamName(playoffPicture.aleastWinner)} (BYE) vs WC Winner</div>
+                <div class="note">#2 ${this.getTeamName(playoffPicture.alwestWinner)} (BYE) vs #3 ${this.getTeamName(playoffPicture.alcentralWinner)}</div>
             `;
             container.appendChild(aldsDiv);
         } else {
-            // NL Wild Card Series
+            // NL Wild Card Series (only WC teams play)
             const wcSeries = [
                 {
                     awayTeam: this.getTeamName(playoffPicture.wc3),
-                    homeTeam: this.getTeamName(playoffPicture.nlTopSeed),
+                    homeTeam: this.getTeamName(playoffPicture.wc2),
                     awaySeed: 'WC3',
-                    homeSeed: '1',
+                    homeSeed: 'WC2',
                     date: 'Sep 30 - Oct 2',
-                    note: 'Wild Card Series'
-                },
-                {
-                    awayTeam: this.getTeamName(playoffPicture.wc2),
-                    homeTeam: this.getTeamName(playoffPicture.nlSecondSeed),
-                    awaySeed: 'WC2',
-                    homeSeed: '2',
-                    date: 'Sep 30 - Oct 2', 
                     note: 'Wild Card Series'
                 }
             ];
@@ -741,13 +726,14 @@ class PlayoffSimulator {
                 container.appendChild(matchupDiv);
             });
 
-            // NLDS placeholder
+            // NLDS with byes
             const nldsDiv = document.createElement('div');
             nldsDiv.className = 'bracket-matchup';
             nldsDiv.innerHTML = `
                 <h3>NLDS Matchups</h3>
                 <div class="date">Oct 5-10</div>
-                <div class="note">Based on WC winners</div>
+                <div class="note">#1 ${this.getTeamName(playoffPicture.nlTopSeed)} (BYE) vs WC Winner</div>
+                <div class="note">#2 ${this.getTeamName(playoffPicture.nlSecondSeed)} (BYE) vs #3 ${this.getTeamName(playoffPicture.nlThirdSeed)}</div>
             `;
             container.appendChild(nldsDiv);
         }

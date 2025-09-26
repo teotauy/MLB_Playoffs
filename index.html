@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AL Playoff Permutation Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏟️ AL Playoff Permutation Simulator</h1>
+            <p class="subtitle">Explore how the final 3 games affect playoff seeding</p>
+        </header>
+
+        <div class="intro-section">
+            <h2>Current Standings</h2>
+            <p>Three games remain in the 2025 MLB regular season. Six American League teams are still battling for playoff positioning:</p>
+            <ul>
+                <li><strong>Yankees and Blue Jays (both 91–68):</strong> fighting for the AL East title</li>
+                <li><strong>Guardians and Tigers (both 86–73):</strong> battling for the AL Central</li>
+                <li><strong>Red Sox (87–72) and Astros (85–74):</strong> chasing Wild Card spots</li>
+            </ul>
+            <p>MLB's playoff format includes 3 division winners and 3 Wild Card teams. No Game 163: ties are settled by head-to-head season series.</p>
+        </div>
+
+        <div class="mode-toggle-section">
+            <h2>Playoff Simulator</h2>
+            <div class="league-toggle">
+                <button id="al-league" class="league-btn active">American League</button>
+                <button id="nl-league" class="league-btn">National League</button>
+            </div>
+            <div class="mode-toggle">
+                <button id="simulation-mode" class="mode-btn active">Simulation Mode</button>
+                <button id="live-mode" class="mode-btn">Live Data Mode</button>
+            </div>
+            <p class="mode-description" id="mode-description">
+                Explore different game outcomes using sliders below
+            </p>
+        </div>
+
+        <div class="controls-section" id="simulation-controls">
+            <h2>Game Outcomes</h2>
+            <div class="sliders-container" id="sliders-container">
+                <!-- AL Sliders -->
+                <div id="al-sliders">
+                    <div class="slider-group">
+                        <label for="guardians-wins">Guardians vs Rangers</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="guardians-wins" min="0" max="3" value="3" class="slider">
+                            <span class="slider-value">3</span>
+                        </div>
+                        <div class="slider-info">Rangers wins: <span id="rangers-wins">0</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="redsox-wins">Red Sox vs Tigers</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="redsox-wins" min="0" max="3" value="3" class="slider">
+                            <span class="slider-value">3</span>
+                        </div>
+                        <div class="slider-info">Tigers wins: <span id="tigers-wins">0</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="astros-wins">Astros vs Angels</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="astros-wins" min="0" max="3" value="3" class="slider">
+                            <span class="slider-value">3</span>
+                        </div>
+                        <div class="slider-info">Angels wins: <span id="angels-wins">0</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="yankees-wins">Yankees Final Wins</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="yankees-wins" min="0" max="3" value="2" class="slider">
+                            <span class="slider-value">2</span>
+                        </div>
+                        <div class="slider-info">Final record: <span id="yankees-record">93-68</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="bluejays-wins">Blue Jays Final Wins</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="bluejays-wins" min="0" max="3" value="2" class="slider">
+                            <span class="slider-value">2</span>
+                        </div>
+                        <div class="slider-info">Final record: <span id="bluejays-record">93-68</span></div>
+                    </div>
+                </div>
+
+                <!-- NL Sliders -->
+                <div id="nl-sliders" class="hidden">
+                    <div class="slider-group">
+                        <label for="cubs-wins">Cubs vs Cardinals</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="cubs-wins" min="0" max="3" value="2" class="slider">
+                            <span class="slider-value">2</span>
+                        </div>
+                        <div class="slider-info">Cardinals wins: <span id="cardinals-wins">1</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="padres-wins">Padres vs Diamondbacks</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="padres-wins" min="0" max="3" value="2" class="slider">
+                            <span class="slider-value">2</span>
+                        </div>
+                        <div class="slider-info">Diamondbacks wins: <span id="diamondbacks-wins">1</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="mets-wins">Mets vs Marlins</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="mets-wins" min="0" max="3" value="2" class="slider">
+                            <span class="slider-value">2</span>
+                        </div>
+                        <div class="slider-info">Marlins wins: <span id="marlins-wins">1</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="brewers-wins">Brewers Final Wins</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="brewers-wins" min="0" max="3" value="1" class="slider">
+                            <span class="slider-value">1</span>
+                        </div>
+                        <div class="slider-info">Final record: <span id="brewers-record">97-62</span></div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label for="phillies-wins">Phillies Final Wins</label>
+                        <div class="slider-wrapper">
+                            <input type="range" id="phillies-wins" min="0" max="3" value="1" class="slider">
+                            <span class="slider-value">1</span>
+                        </div>
+                        <div class="slider-info">Final record: <span id="phillies-record">95-64</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdowns-container">
+                <div class="dropdown-group" id="division-override-group">
+                    <label for="division-override" id="division-override-label">AL East Winner Override</label>
+                    <select id="division-override">
+                        <option value="auto">Auto (based on record)</option>
+                        <option value="yankees">Yankees</option>
+                        <option value="bluejays">Blue Jays</option>
+                    </select>
+                </div>
+
+                <div class="dropdown-group">
+                    <label for="bracket-toggle">Bracket Display</label>
+                    <select id="bracket-toggle">
+                        <option value="show">Show Bracket</option>
+                        <option value="hide">Hide Bracket</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="live-data-section hidden" id="live-data-section">
+            <h2>📡 Live Game Data</h2>
+            <div class="live-status">
+                <div class="last-updated">Last updated: <span id="last-updated">Loading...</span></div>
+                <div class="auto-refresh">
+                    <label>
+                        <input type="checkbox" id="auto-refresh" checked> Auto-refresh every 2 minutes
+                    </label>
+                </div>
+            </div>
+            <div class="live-games" id="live-games">
+                <!-- Live game data will be populated here -->
+            </div>
+        </div>
+
+        <div class="output-section">
+            <h2>📊 Output Table</h2>
+            <p class="output-subtitle" id="output-subtitle">Dynamically updates based on slider inputs:</p>
+            <div class="table-container">
+                <table id="output-table">
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Final Record</th>
+                            <th>Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody id="output-tbody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bracket-section" id="bracket-section">
+            <h2>🏆 Playoff Bracket</h2>
+            <div class="bracket-container" id="bracket-container">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

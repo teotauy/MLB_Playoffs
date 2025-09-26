@@ -1,0 +1,593 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    font-weight: 400;
+}
+
+/* Sections */
+.intro-section,
+.mode-toggle-section,
+.controls-section,
+.live-data-section,
+.output-section,
+.bracket-section {
+    background: rgba(255, 255, 255, 0.95);
+    margin-bottom: 25px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.intro-section h2,
+.mode-toggle-section h2,
+.controls-section h2,
+.live-data-section h2,
+.output-section h2,
+.bracket-section h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.intro-section ul {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.intro-section li {
+    margin-bottom: 8px;
+}
+
+/* Sliders */
+.sliders-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.slider-group {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.slider-group:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.slider-group label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.slider {
+    flex: 1;
+    height: 8px;
+    border-radius: 5px;
+    background: #ddd;
+    outline: none;
+    -webkit-appearance: none;
+    transition: all 0.3s ease;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    background: #5a6fd8;
+    transform: scale(1.1);
+}
+
+.slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.slider-value {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1.2rem;
+    min-width: 20px;
+    text-align: center;
+}
+
+.slider-info {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Dropdowns */
+.dropdowns-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.dropdown-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dropdown-group label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.dropdown-group select {
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.dropdown-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Output Table */
+.output-subtitle {
+    color: #6c757d;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#output-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#output-table th {
+    background: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #e9ecef;
+}
+
+#output-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.3s ease;
+}
+
+#output-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+#output-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Team-specific styling */
+.team-name {
+    font-weight: 600;
+}
+
+.record {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.outcome {
+    font-weight: 500;
+}
+
+.outcome.division-winner {
+    color: #28a745;
+}
+
+.outcome.wildcard {
+    color: #007bff;
+}
+
+.outcome.eliminated {
+    color: #dc3545;
+}
+
+/* Bracket */
+.bracket-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.bracket-matchup {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    text-align: center;
+}
+
+.bracket-matchup h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.bracket-matchup .date {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.bracket-matchup .teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.bracket-matchup .team {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.bracket-matchup .team.home {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.bracket-matchup .team.away {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.bracket-matchup .vs {
+    font-weight: 700;
+    color: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .sliders-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .dropdowns-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .bracket-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* League Toggle */
+.league-toggle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.league-btn {
+    padding: 12px 24px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.league-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.league-btn.active {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
+/* Mode Toggle */
+.mode-toggle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.mode-btn {
+    padding: 12px 24px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #6c757d;
+}
+
+.mode-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.mode-btn.active {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
+.mode-description {
+    color: #6c757d;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Live Data Section */
+.live-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+.last-updated {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.auto-refresh label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+.auto-refresh input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #667eea;
+}
+
+.live-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.live-game {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.live-game:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.live-game h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.game-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.game-status .status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.game-status .status.live {
+    background: #dc3545;
+    color: white;
+}
+
+.game-status .status.final {
+    background: #28a745;
+    color: white;
+}
+
+.game-status .status.scheduled {
+    background: #6c757d;
+    color: white;
+}
+
+.game-status .time {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.game-score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.team-score {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.team-score.home {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.team-score.away {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.team-score .team-name {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.team-score .score {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.game-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e9ecef;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Loading states */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e9ecef;
+    border-top: 2px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error states */
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+    margin: 10px 0;
+}
+
+/* Hidden elements */
+.hidden {
+    display: none !important;
+}

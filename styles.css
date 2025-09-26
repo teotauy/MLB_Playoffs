@@ -815,6 +815,16 @@ header h1 {
     text-transform: uppercase;
 }
 
+.final-badge {
+    background: #28a745;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
 .game-status .time {
     color: #6c757d;
     font-size: 0.9rem;

@@ -329,7 +329,7 @@ class PlayoffSimulator {
             simControls.classList.add('hidden');
             liveSection.classList.remove('hidden');
             modeDescription.textContent = 'View live game data and current playoff picture';
-            outputSubtitle.textContent = 'Updates with live game results:';
+            outputSubtitle.textContent = 'Updates with live game results (shows "if the game ends now" scenarios):';
             this.loadLiveData();
             if (document.getElementById('auto-refresh').checked) {
                 this.startAutoRefresh();
@@ -974,6 +974,7 @@ class PlayoffSimulator {
                     <h3>${game.awayTeam} @ ${game.homeTeam}</h3>
                     <div class="game-status">
                         ${game.status === 'Live' ? '<span class="live-badge">LIVE</span>' : ''}
+                        ${game.status === 'Final' ? '<span class="final-badge">FINAL</span>' : ''}
                         <span class="time">${game.time}</span>
                     </div>
                 </div>
@@ -989,6 +990,7 @@ class PlayoffSimulator {
                     </div>
                 </div>
                 ${game.status === 'Live' ? `<div class="game-details">${game.inning}${game.inning ? ' inning' : ''}</div>` : ''}
+                ${game.status === 'Final' ? `<div class="game-details">Final Score</div>` : ''}
             `;
             
             container.appendChild(gameDiv);
@@ -996,13 +998,15 @@ class PlayoffSimulator {
     }
 
     updatePlayoffPictureFromLiveData(data) {
-        // Update standings with live data
+        // Update standings with live data and current game results
         const liveStandings = data.standings;
+        const liveGames = data.games;
         
-        // Calculate final standings based on remaining games
+        // Calculate final standings based on remaining games and current live scores
         const finalStandings = {};
         const currentLeagueStandings = this.currentStandings[this.currentLeague];
         
+        // First, update standings with any completed games
         Object.keys(liveStandings).forEach(team => {
             const current = liveStandings[team];
             const teamData = currentLeagueStandings[team];
@@ -1015,6 +1019,29 @@ class PlayoffSimulator {
                     losses: current.losses,
                     totalGames: current.wins + current.losses + remainingGames
                 };
+            }
+        });
+
+        // Then, apply "if the game ends now" logic for live games
+        liveGames.forEach(game => {
+            if (game.status === 'Live') {
+                // Determine which team is currently winning
+                const homeTeamKey = this.getTeamKey(game.homeTeam);
+                const awayTeamKey = this.getTeamKey(game.awayTeam);
+                
+                if (homeTeamKey && awayTeamKey && finalStandings[homeTeamKey] && finalStandings[awayTeamKey]) {
+                    // If the game ended now, who would win?
+                    if (game.awayScore > game.homeScore) {
+                        // Away team would win - add 1 win to away team, 1 loss to home team
+                        finalStandings[awayTeamKey].wins += 1;
+                        finalStandings[homeTeamKey].losses += 1;
+                    } else if (game.homeScore > game.awayScore) {
+                        // Home team would win - add 1 win to home team, 1 loss to away team
+                        finalStandings[homeTeamKey].wins += 1;
+                        finalStandings[awayTeamKey].losses += 1;
+                    }
+                    // If tied, no change (game continues)
+                }
             }
         });
 

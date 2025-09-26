@@ -476,9 +476,10 @@ class PlayoffSimulator {
         // WC1 is the AL East runner-up
         const wc1 = aleastWinner === 'yankees' ? 'bluejays' : 'yankees';
         
-        // WC2 and WC3 are the next two best teams
-        const wc2 = remainingTeams[0]?.name;
-        const wc3 = remainingTeams[1]?.name;
+        // WC2 and WC3 are the next two best teams (excluding the AL East runner-up)
+        const otherTeams = remainingTeams.filter(t => t.name !== wc1);
+        const wc2 = otherTeams[0]?.name;
+        const wc3 = otherTeams[1]?.name;
 
         return {
             aleastWinner,

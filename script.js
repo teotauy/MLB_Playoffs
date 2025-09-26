@@ -119,17 +119,36 @@ class PlayoffSimulator {
         this.generatePermutationTable();
         
         // Preset scenario event listeners
-        document.getElementById('home-team-wins').addEventListener('click', () => {
-            this.applyPresetScenario('home-wins');
-        });
+        const homeWinsBtn = document.getElementById('home-team-wins');
+        const betterRecordBtn = document.getElementById('better-record-wins');
+        const resetBtn = document.getElementById('reset-scenario');
         
-        document.getElementById('better-record-wins').addEventListener('click', () => {
-            this.applyPresetScenario('better-record');
-        });
+        if (homeWinsBtn) {
+            homeWinsBtn.addEventListener('click', () => {
+                console.log('Home team wins button clicked');
+                this.applyPresetScenario('home-wins');
+            });
+        } else {
+            console.error('Home team wins button not found');
+        }
         
-        document.getElementById('reset-scenario').addEventListener('click', () => {
-            this.applyPresetScenario('reset');
-        });
+        if (betterRecordBtn) {
+            betterRecordBtn.addEventListener('click', () => {
+                console.log('Better record wins button clicked');
+                this.applyPresetScenario('better-record');
+            });
+        } else {
+            console.error('Better record wins button not found');
+        }
+        
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                console.log('Reset scenario button clicked');
+                this.applyPresetScenario('reset');
+            });
+        } else {
+            console.error('Reset scenario button not found');
+        }
     }
 
     initializeOverallRecords() {
@@ -1474,13 +1493,20 @@ class PlayoffSimulator {
     }
 
     applyPresetScenario(scenario) {
+        console.log('Applying preset scenario:', scenario);
+        
         const sliderIds = this.currentLeague === 'al' 
             ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays']
             : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
 
+        console.log('Current league:', this.currentLeague, 'Slider IDs:', sliderIds);
+
         sliderIds.forEach(sliderId => {
             const slider = document.getElementById(sliderId);
-            if (!slider) return;
+            if (!slider) {
+                console.log('Slider not found:', sliderId);
+                return;
+            }
 
             let newValue;
             
@@ -1498,14 +1524,22 @@ class PlayoffSimulator {
                     newValue = 0;
                     break;
                 default:
+                    console.log('Unknown scenario:', scenario);
                     return;
             }
 
+            console.log('Setting slider', sliderId, 'to value:', newValue);
             slider.value = newValue;
+            
+            // Trigger the input event to ensure all listeners are called
+            slider.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            // Also manually update the series wins
             this.updateSeriesWins(sliderId, newValue);
         });
 
         // Update the simulation with new values
+        console.log('Updating simulation...');
         this.updateSimulation();
         
         // Show notification
@@ -1516,26 +1550,49 @@ class PlayoffSimulator {
         // Determine which team has the better record and set slider accordingly
         const currentStandings = this.currentStandings[this.currentLeague];
         
+        console.log('Getting better record wins for:', sliderId);
+        console.log('Current standings:', currentStandings);
+        
+        let result;
         switch (sliderId) {
             case 'rangers-guardians':
-                return currentStandings.guardians.wins > currentStandings.rangers.wins ? 3 : 0;
+                result = currentStandings.guardians.wins > currentStandings.rangers.wins ? 3 : 0;
+                console.log('Guardians wins:', currentStandings.guardians.wins, 'Rangers wins:', currentStandings.rangers.wins, 'Result:', result);
+                return result;
             case 'tigers-redsox':
-                return currentStandings.redsox.wins > currentStandings.tigers.wins ? 3 : 0;
+                result = currentStandings.redsox.wins > currentStandings.tigers.wins ? 3 : 0;
+                console.log('Red Sox wins:', currentStandings.redsox.wins, 'Tigers wins:', currentStandings.tigers.wins, 'Result:', result);
+                return result;
             case 'astros-angels':
-                return currentStandings.astros.wins > currentStandings.angels.wins ? 0 : 3;
+                result = currentStandings.astros.wins > currentStandings.angels.wins ? 0 : 3;
+                console.log('Astros wins:', currentStandings.astros.wins, 'Angels wins:', currentStandings.angels.wins, 'Result:', result);
+                return result;
             case 'orioles-yankees':
-                return currentStandings.yankees.wins > currentStandings.orioles.wins ? 3 : 0;
+                result = currentStandings.yankees.wins > currentStandings.orioles.wins ? 3 : 0;
+                console.log('Yankees wins:', currentStandings.yankees.wins, 'Orioles wins:', currentStandings.orioles.wins, 'Result:', result);
+                return result;
             case 'rays-bluejays':
-                return currentStandings.bluejays.wins > currentStandings.rays.wins ? 3 : 0;
+                result = currentStandings.bluejays.wins > currentStandings.rays.wins ? 3 : 0;
+                console.log('Blue Jays wins:', currentStandings.bluejays.wins, 'Rays wins:', currentStandings.rays.wins, 'Result:', result);
+                return result;
             case 'cubs-cardinals':
-                return currentStandings.cardinals.wins > currentStandings.cubs.wins ? 3 : 0;
+                result = currentStandings.cardinals.wins > currentStandings.cubs.wins ? 3 : 0;
+                console.log('Cardinals wins:', currentStandings.cardinals.wins, 'Cubs wins:', currentStandings.cubs.wins, 'Result:', result);
+                return result;
             case 'diamondbacks-padres':
-                return currentStandings.padres.wins > currentStandings.diamondbacks.wins ? 3 : 0;
+                result = currentStandings.padres.wins > currentStandings.diamondbacks.wins ? 3 : 0;
+                console.log('Padres wins:', currentStandings.padres.wins, 'Diamondbacks wins:', currentStandings.diamondbacks.wins, 'Result:', result);
+                return result;
             case 'mets-marlins':
-                return currentStandings.marlins.wins > currentStandings.mets.wins ? 3 : 0;
+                result = currentStandings.marlins.wins > currentStandings.mets.wins ? 3 : 0;
+                console.log('Marlins wins:', currentStandings.marlins.wins, 'Mets wins:', currentStandings.mets.wins, 'Result:', result);
+                return result;
             case 'reds-brewers':
-                return currentStandings.brewers.wins > currentStandings.reds.wins ? 3 : 0;
+                result = currentStandings.brewers.wins > currentStandings.reds.wins ? 3 : 0;
+                console.log('Brewers wins:', currentStandings.brewers.wins, 'Reds wins:', currentStandings.reds.wins, 'Result:', result);
+                return result;
             default:
+                console.log('Unknown slider ID:', sliderId);
                 return 0;
         }
     }

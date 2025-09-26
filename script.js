@@ -51,6 +51,7 @@ class PlayoffSimulator {
         this.currentLeague = 'al';
 
         this.initializeEventListeners();
+        this.initializeOverallRecords();
         this.updateSimulation();
     }
 
@@ -98,6 +99,28 @@ class PlayoffSimulator {
                 bracketSection.classList.add('hidden');
             } else {
                 bracketSection.classList.remove('hidden');
+            }
+        });
+    }
+
+    initializeOverallRecords() {
+        // Initialize all overall records based on current slider positions
+        const alSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'yankees-bluejays'];
+        const nlSliders = ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
+        
+        // Initialize AL records
+        alSliders.forEach(sliderId => {
+            const slider = document.getElementById(sliderId);
+            if (slider) {
+                this.updateSeriesWins(sliderId, slider.value);
+            }
+        });
+        
+        // Initialize NL records
+        nlSliders.forEach(sliderId => {
+            const slider = document.getElementById(sliderId);
+            if (slider) {
+                this.updateSeriesWins(sliderId, slider.value);
             }
         });
     }
@@ -179,35 +202,66 @@ class PlayoffSimulator {
             case 'rangers-guardians':
                 document.getElementById('rangers-wins').textContent = awayWinsInt;
                 document.getElementById('guardians-wins').textContent = homeWins;
+                this.updateOverallRecord('rangers', awayWinsInt);
+                this.updateOverallRecord('guardians', homeWins);
                 break;
             case 'tigers-redsox':
                 document.getElementById('tigers-wins').textContent = awayWinsInt;
                 document.getElementById('redsox-wins').textContent = homeWins;
+                this.updateOverallRecord('tigers', awayWinsInt);
+                this.updateOverallRecord('redsox', homeWins);
                 break;
             case 'astros-angels':
                 document.getElementById('astros-wins').textContent = awayWinsInt;
                 document.getElementById('angels-wins').textContent = homeWins;
+                this.updateOverallRecord('astros', awayWinsInt);
+                this.updateOverallRecord('angels', homeWins);
                 break;
             case 'yankees-bluejays':
                 document.getElementById('yankees-wins').textContent = awayWinsInt;
                 document.getElementById('bluejays-wins').textContent = homeWins;
+                this.updateOverallRecord('yankees', awayWinsInt);
+                this.updateOverallRecord('bluejays', homeWins);
                 break;
             case 'cubs-cardinals':
                 document.getElementById('cubs-wins').textContent = awayWinsInt;
                 document.getElementById('cardinals-wins').textContent = homeWins;
+                this.updateOverallRecord('cubs', awayWinsInt);
+                this.updateOverallRecord('cardinals', homeWins);
                 break;
             case 'diamondbacks-padres':
                 document.getElementById('diamondbacks-wins').textContent = awayWinsInt;
                 document.getElementById('padres-wins').textContent = homeWins;
+                this.updateOverallRecord('diamondbacks', awayWinsInt);
+                this.updateOverallRecord('padres', homeWins);
                 break;
             case 'mets-marlins':
                 document.getElementById('mets-wins').textContent = awayWinsInt;
                 document.getElementById('marlins-wins').textContent = homeWins;
+                this.updateOverallRecord('mets', awayWinsInt);
+                this.updateOverallRecord('marlins', homeWins);
                 break;
             case 'reds-brewers':
                 document.getElementById('reds-wins').textContent = awayWinsInt;
                 document.getElementById('brewers-wins').textContent = homeWins;
+                this.updateOverallRecord('reds', awayWinsInt);
+                this.updateOverallRecord('brewers', homeWins);
                 break;
+        }
+    }
+
+    updateOverallRecord(teamKey, additionalWins) {
+        const currentStandings = this.currentStandings[this.currentLeague];
+        const team = currentStandings[teamKey];
+        
+        if (team) {
+            const finalWins = team.wins + additionalWins;
+            const finalLosses = team.losses + (team.gamesLeft - additionalWins);
+            const overallElement = document.getElementById(`${teamKey}-overall`);
+            
+            if (overallElement) {
+                overallElement.textContent = `${finalWins}-${finalLosses}`;
+            }
         }
     }
 

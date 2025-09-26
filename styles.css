@@ -175,17 +175,25 @@ header h1 {
 .slider-info {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
+}
+
+.team-record {
+    flex: 1;
+    text-align: center;
+}
+
+.series-record {
     font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 4px;
+}
+
+.overall-record {
+    font-size: 0.8rem;
     color: #6c757d;
     font-weight: 500;
-}
-
-.away-wins {
-    color: #f57c00;
-}
-
-.home-wins {
-    color: #1976d2;
 }
 
 /* Dropdowns */

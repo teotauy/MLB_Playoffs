@@ -244,6 +244,14 @@ class PlayoffSimulator {
         console.log('Slider values:', sliderValues);
         const finalStandings = this.calculateFinalStandings(sliderValues);
         console.log('Final standings:', finalStandings);
+        
+        // Show the key AL Central teams
+        if (this.currentLeague === 'al') {
+            console.log('AL Central Race:');
+            console.log('Guardians:', finalStandings.guardians.wins + '-' + finalStandings.guardians.losses);
+            console.log('Tigers:', finalStandings.tigers.wins + '-' + finalStandings.tigers.losses);
+        }
+        
         const playoffPicture = this.determinePlayoffPicture(finalStandings);
         console.log('Playoff picture:', playoffPicture);
         

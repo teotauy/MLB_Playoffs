@@ -865,6 +865,28 @@ header h1 {
     margin: 10px 0;
 }
 
+/* Timestamp Section */
+.timestamp-section {
+    text-align: center;
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(26, 26, 26, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(26, 26, 26, 0.1);
+}
+
+.current-as-of {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.current-as-of span {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
 /* Hidden elements */
 .hidden {
     display: none !important;

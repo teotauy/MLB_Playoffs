@@ -4,6 +4,8 @@ class PlayoffSimulator {
         this.currentMode = 'simulation';
         this.autoRefreshInterval = null;
         this.lastUpdateTime = null;
+        this.finalGameResults = {}; // Track final game results
+        this.lastTimestampUpdate = null;
         // Current standings (as of Sep 26, 2025 from MLB.com playoff picture)
         this.currentStandings = {
             // American League
@@ -62,6 +64,8 @@ class PlayoffSimulator {
         this.initializeEventListeners();
         this.initializeOverallRecords();
         this.updateSimulation();
+        this.updateTimestamp();
+        this.startLiveGameTracking();
     }
 
     initializeEventListeners() {
@@ -1257,6 +1261,174 @@ class PlayoffSimulator {
             <p><strong>Based on:</strong> ${this.currentLeague === 'al' ? '5 series with 4 possible outcomes each (0-3 wins)' : '4 series with 4 possible outcomes each (0-3 wins)'}</p>
             <p><strong>Calculation:</strong> ${this.currentLeague === 'al' ? '4^5 = 1,024 scenarios' : '4^4 = 256 scenarios'}</p>
         `;
+    }
+
+    updateTimestamp() {
+        const now = new Date();
+        const timestamp = now.toLocaleString('en-US', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            timeZoneName: 'short'
+        });
+        
+        const timestampElement = document.getElementById('current-timestamp');
+        if (timestampElement) {
+            timestampElement.textContent = timestamp;
+        }
+        
+        this.lastTimestampUpdate = now;
+    }
+
+    startLiveGameTracking() {
+        // Check for live games every 30 seconds
+        setInterval(() => {
+            this.checkForFinalGames();
+        }, 30000);
+        
+        // Update timestamp every minute
+        setInterval(() => {
+            this.updateTimestamp();
+        }, 60000);
+    }
+
+    async checkForFinalGames() {
+        try {
+            // Fetch current game data
+            const liveData = await this.fetchLiveGameData();
+            
+            // Check each game to see if it's now final
+            liveData.games.forEach(game => {
+                const gameKey = this.getGameKey(game);
+                
+                if (game.status === 'Final' && !this.finalGameResults[gameKey]) {
+                    // Game just went final - update simulation parameters
+                    this.updateSimulationFromFinalGame(game);
+                    this.finalGameResults[gameKey] = {
+                        homeTeam: game.homeTeam,
+                        awayTeam: game.awayTeam,
+                        homeScore: game.homeScore,
+                        awayScore: game.awayScore,
+                        finalTime: new Date()
+                    };
+                }
+            });
+            
+        } catch (error) {
+            console.error('Error checking for final games:', error);
+        }
+    }
+
+    getGameKey(game) {
+        // Create a unique key for each game
+        return `${game.awayTeam}-${game.homeTeam}`.toLowerCase().replace(/\s+/g, '');
+    }
+
+    updateSimulationFromFinalGame(game) {
+        // Map team names to our internal keys
+        const teamMap = {
+            'New York Yankees': 'yankees',
+            'Toronto Blue Jays': 'bluejays',
+            'Cleveland Guardians': 'guardians',
+            'Detroit Tigers': 'tigers',
+            'Boston Red Sox': 'redsox',
+            'Houston Astros': 'astros',
+            'Baltimore Orioles': 'orioles',
+            'Tampa Bay Rays': 'rays',
+            'Texas Rangers': 'rangers',
+            'Los Angeles Angels': 'angels',
+            'Milwaukee Brewers': 'brewers',
+            'Philadelphia Phillies': 'phillies',
+            'Los Angeles Dodgers': 'dodgers',
+            'Chicago Cubs': 'cubs',
+            'San Diego Padres': 'padres',
+            'New York Mets': 'mets',
+            'St. Louis Cardinals': 'cardinals',
+            'Arizona Diamondbacks': 'diamondbacks',
+            'Miami Marlins': 'marlins',
+            'Cincinnati Reds': 'reds'
+        };
+
+        const homeTeamKey = teamMap[game.homeTeam];
+        const awayTeamKey = teamMap[game.awayTeam];
+        
+        if (!homeTeamKey || !awayTeamKey) return;
+
+        // Determine which slider this corresponds to
+        const sliderId = this.getSliderIdFromTeams(homeTeamKey, awayTeamKey);
+        if (!sliderId) return;
+
+        // Determine the result (0-3 wins for away team)
+        const awayWins = game.awayScore > game.homeScore ? 1 : 0;
+        const sliderValue = 3 - awayWins; // Convert to slider position
+
+        // Update the slider
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            slider.value = sliderValue;
+            this.updateSeriesWins(sliderId, sliderValue);
+            this.updateSimulation();
+            
+            // Show a notification
+            this.showGameFinalNotification(game, awayWins);
+        }
+    }
+
+    getSliderIdFromTeams(homeTeam, awayTeam) {
+        // Map team combinations to slider IDs
+        const sliderMap = {
+            'guardians-rangers': 'rangers-guardians',
+            'redsox-tigers': 'tigers-redsox',
+            'angels-astros': 'astros-angels',
+            'yankees-orioles': 'orioles-yankees',
+            'bluejays-rays': 'rays-bluejays',
+            'cardinals-cubs': 'cubs-cardinals',
+            'padres-diamondbacks': 'diamondbacks-padres',
+            'marlins-mets': 'mets-marlins',
+            'brewers-reds': 'reds-brewers'
+        };
+        
+        const key = `${homeTeam}-${awayTeam}`;
+        return sliderMap[key];
+    }
+
+    showGameFinalNotification(game, awayWins) {
+        // Create a temporary notification
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            max-width: 300px;
+        `;
+        
+        const winner = awayWins > 0 ? game.awayTeam : game.homeTeam;
+        notification.innerHTML = `
+            <strong>Game Final!</strong><br>
+            ${game.awayTeam} ${game.awayScore} @ ${game.homeTeam} ${game.homeScore}<br>
+            <strong>Winner: ${winner}</strong><br>
+            <small>Simulation updated automatically</small>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
     }
 }
 

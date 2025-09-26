@@ -196,63 +196,65 @@ class PlayoffSimulator {
         });
     }
 
-    updateSeriesWins(sliderId, awayWins) {
-        const awayWinsInt = parseInt(awayWins);
-        const homeWins = 3 - awayWinsInt;
+    updateSeriesWins(sliderId, sliderValue) {
+        const sliderPos = parseInt(sliderValue);
+        // Slider position 0 = home team sweeps (3 wins), position 3 = away team sweeps (3 wins)
+        const homeWins = 3 - sliderPos;
+        const awayWins = sliderPos;
         
         switch(sliderId) {
             case 'rangers-guardians':
-                document.getElementById('rangers-wins').textContent = awayWinsInt;
+                document.getElementById('rangers-wins').textContent = awayWins;
                 document.getElementById('guardians-wins').textContent = homeWins;
-                this.updateOverallRecord('rangers', awayWinsInt);
+                this.updateOverallRecord('rangers', awayWins);
                 this.updateOverallRecord('guardians', homeWins);
                 break;
             case 'tigers-redsox':
-                document.getElementById('tigers-wins').textContent = awayWinsInt;
+                document.getElementById('tigers-wins').textContent = awayWins;
                 document.getElementById('redsox-wins').textContent = homeWins;
-                this.updateOverallRecord('tigers', awayWinsInt);
+                this.updateOverallRecord('tigers', awayWins);
                 this.updateOverallRecord('redsox', homeWins);
                 break;
             case 'astros-angels':
-                document.getElementById('astros-wins').textContent = awayWinsInt;
+                document.getElementById('astros-wins').textContent = awayWins;
                 document.getElementById('angels-wins').textContent = homeWins;
-                this.updateOverallRecord('astros', awayWinsInt);
+                this.updateOverallRecord('astros', awayWins);
                 this.updateOverallRecord('angels', homeWins);
                 break;
             case 'orioles-yankees':
-                document.getElementById('orioles-wins').textContent = awayWinsInt;
+                document.getElementById('orioles-wins').textContent = awayWins;
                 document.getElementById('yankees-wins').textContent = homeWins;
-                this.updateOverallRecord('orioles', awayWinsInt);
+                this.updateOverallRecord('orioles', awayWins);
                 this.updateOverallRecord('yankees', homeWins);
                 break;
             case 'rays-bluejays':
-                document.getElementById('rays-wins').textContent = awayWinsInt;
+                document.getElementById('rays-wins').textContent = awayWins;
                 document.getElementById('bluejays-wins').textContent = homeWins;
-                this.updateOverallRecord('rays', awayWinsInt);
+                this.updateOverallRecord('rays', awayWins);
                 this.updateOverallRecord('bluejays', homeWins);
                 break;
             case 'cubs-cardinals':
-                document.getElementById('cubs-wins').textContent = awayWinsInt;
+                document.getElementById('cubs-wins').textContent = awayWins;
                 document.getElementById('cardinals-wins').textContent = homeWins;
-                this.updateOverallRecord('cubs', awayWinsInt);
+                this.updateOverallRecord('cubs', awayWins);
                 this.updateOverallRecord('cardinals', homeWins);
                 break;
             case 'diamondbacks-padres':
-                document.getElementById('diamondbacks-wins').textContent = awayWinsInt;
+                document.getElementById('diamondbacks-wins').textContent = awayWins;
                 document.getElementById('padres-wins').textContent = homeWins;
-                this.updateOverallRecord('diamondbacks', awayWinsInt);
+                this.updateOverallRecord('diamondbacks', awayWins);
                 this.updateOverallRecord('padres', homeWins);
                 break;
             case 'mets-marlins':
-                document.getElementById('mets-wins').textContent = awayWinsInt;
+                document.getElementById('mets-wins').textContent = awayWins;
                 document.getElementById('marlins-wins').textContent = homeWins;
-                this.updateOverallRecord('mets', awayWinsInt);
+                this.updateOverallRecord('mets', awayWins);
                 this.updateOverallRecord('marlins', homeWins);
                 break;
             case 'reds-brewers':
-                document.getElementById('reds-wins').textContent = awayWinsInt;
+                document.getElementById('reds-wins').textContent = awayWins;
                 document.getElementById('brewers-wins').textContent = homeWins;
-                this.updateOverallRecord('reds', awayWinsInt);
+                this.updateOverallRecord('reds', awayWins);
                 this.updateOverallRecord('brewers', homeWins);
                 break;
         }
@@ -336,26 +338,26 @@ class PlayoffSimulator {
 
     getSliderValues() {
         if (this.currentLeague === 'al') {
-            // Get away team wins from sliders, calculate home team wins
-            const rangersWins = parseInt(document.getElementById('rangers-guardians').value);
-            const tigersWins = parseInt(document.getElementById('tigers-redsox').value);
-            const astrosWins = parseInt(document.getElementById('astros-angels').value);
-            const oriolesWins = parseInt(document.getElementById('orioles-yankees').value);
-            const raysWins = parseInt(document.getElementById('rays-bluejays').value);
+            // Get slider positions and calculate wins correctly
+            const rangersSlider = parseInt(document.getElementById('rangers-guardians').value);
+            const tigersSlider = parseInt(document.getElementById('tigers-redsox').value);
+            const astrosSlider = parseInt(document.getElementById('astros-angels').value);
+            const oriolesSlider = parseInt(document.getElementById('orioles-yankees').value);
+            const raysSlider = parseInt(document.getElementById('rays-bluejays').value);
             
             return {
-                // Away teams get their slider value
-                rangers: rangersWins,
-                tigers: tigersWins,
-                astros: astrosWins,
-                orioles: oriolesWins,
-                rays: raysWins,
-                // Home teams get 3 minus away team wins
-                guardians: 3 - rangersWins,
-                redsox: 3 - tigersWins,
-                angels: 3 - astrosWins,
-                yankees: 3 - oriolesWins,
-                bluejays: 3 - raysWins
+                // Away teams get slider position value
+                rangers: rangersSlider,
+                tigers: tigersSlider,
+                astros: astrosSlider,
+                orioles: oriolesSlider,
+                rays: raysSlider,
+                // Home teams get 3 minus slider position
+                guardians: 3 - rangersSlider,
+                redsox: 3 - tigersSlider,
+                angels: 3 - astrosSlider,
+                yankees: 3 - oriolesSlider,
+                bluejays: 3 - raysSlider
             };
         } else {
             // Get away team wins from sliders, calculate home team wins

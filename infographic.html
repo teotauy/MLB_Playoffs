@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AL Playoff Scenarios - 64 Permutations Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+        }
+
+        .scenario-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .scenario-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .scenario-info p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.85rem;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #e3f2fd;
+        }
+
+        .team-name {
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        .division-winner {
+            background: #d4edda;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .wild-card {
+            background: #fff3cd;
+            color: #856404;
+            font-weight: 600;
+        }
+
+        .no-playoff {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .percentage {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .high-percentage {
+            color: #28a745;
+        }
+
+        .medium-percentage {
+            color: #ffc107;
+        }
+
+        .low-percentage {
+            color: #dc3545;
+        }
+
+        .yankees-bluejays {
+            background: #e8f4fd;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .yankees-bluejays h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .yankees-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .yankees-table th {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+        }
+
+        .yankees-table td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+                font-size: 0.8rem;
+            }
+            
+            .team-name {
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏟️ AL Playoff Scenarios Analysis</h1>
+        <p class="subtitle">64 Permutations of Final Series Outcomes</p>
+
+        <div class="scenario-info">
+            <h3>📊 Analysis Overview</h3>
+            <p>This analysis covers all 64 possible combinations of the final 3-game series for the 4 AL teams competing for playoff spots:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>Rangers @ Guardians</strong> (4 possible outcomes: 0-3, 1-2, 2-1, 3-0)</li>
+                <li><strong>Tigers @ Red Sox</strong> (4 possible outcomes: 0-3, 1-2, 2-1, 3-0)</li>
+                <li><strong>Astros @ Angels</strong> (4 possible outcomes: 0-3, 1-2, 2-1, 3-0)</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>Total scenarios:</strong> 4 × 4 × 4 = 64 permutations</p>
+        </div>
+
+        <div class="table-container">
+            <table id="scenarios-table">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Win Division</th>
+                        <th>Wild Card 1</th>
+                        <th>Wild Card 2</th>
+                        <th>Wild Card 3</th>
+                        <th>No Playoffs</th>
+                    </tr>
+                </thead>
+                <tbody id="scenarios-body">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="yankees-bluejays">
+            <h3>🏟️ Yankees vs Blue Jays - AL East Race</h3>
+            <p style="text-align: center; margin-bottom: 15px; color: #6c757d;">
+                These teams' outcomes don't affect the other 4 teams' playoff chances
+            </p>
+            <table class="yankees-table">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Win AL East</th>
+                        <th>Wild Card 1</th>
+                        <th>Wild Card 2</th>
+                        <th>Wild Card 3</th>
+                    </tr>
+                </thead>
+                <tbody id="yankees-body">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary-stats">
+            <div class="stat-card">
+                <div class="number">64</div>
+                <div class="label">Total Scenarios</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">4</div>
+                <div class="label">Teams Analyzed</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">3</div>
+                <div class="label">Series Tracked</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">100%</div>
+                <div class="label">Coverage</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current standings (as of analysis date)
+        const currentStandings = {
+            guardians: { wins: 86, losses: 73 },
+            tigers: { wins: 86, losses: 73 },
+            redsox: { wins: 87, losses: 72 },
+            astros: { wins: 85, losses: 74 },
+            yankees: { wins: 91, losses: 68 },
+            bluejays: { wins: 91, losses: 68 }
+        };
+
+        // Calculate all 64 scenarios
+        function calculateAllScenarios() {
+            const scenarios = [];
+            
+            // Generate all combinations
+            for (let rangersGuardians = 0; rangersGuardians <= 3; rangersGuardians++) {
+                for (let tigersRedsox = 0; tigersRedsox <= 3; tigersRedsox++) {
+                    for (let astrosAngels = 0; astrosAngels <= 3; astrosAngels++) {
+                        const scenario = {
+                            rangersGuardians,
+                            tigersRedsox,
+                            astrosAngels,
+                            // Calculate final records
+                            guardians: currentStandings.guardians.wins + (3 - rangersGuardians),
+                            tigers: currentStandings.tigers.wins + tigersRedsox,
+                            redsox: currentStandings.redsox.wins + (3 - tigersRedsox),
+                            astros: currentStandings.astros.wins + astrosAngels
+                        };
+                        scenarios.push(scenario);
+                    }
+                }
+            }
+            
+            return scenarios;
+        }
+
+        // Determine playoff picture for a scenario
+        function determinePlayoffPicture(scenario) {
+            const teams = [
+                { name: 'Guardians', wins: scenario.guardians, losses: 159 - scenario.guardians },
+                { name: 'Tigers', wins: scenario.tigers, losses: 159 - scenario.tigers },
+                { name: 'Red Sox', wins: scenario.redsox, losses: 159 - scenario.redsox },
+                { name: 'Astros', wins: scenario.astros, losses: 159 - scenario.astros }
+            ];
+
+            // Sort by wins (descending)
+            teams.sort((a, b) => b.wins - a.wins);
+
+            // Determine AL Central winner (Guardians vs Tigers)
+            const guardiansWins = scenario.guardians;
+            const tigersWins = scenario.tigers;
+            const alCentralWinner = guardiansWins > tigersWins ? 'Guardians' : 
+                                  tigersWins > guardiansWins ? 'Tigers' : 'Guardians'; // Tiebreaker to Guardians
+
+            // Determine Wild Card spots (top 3 non-division winners)
+            const wildCardTeams = teams.filter(team => team.name !== alCentralWinner).slice(0, 3);
+
+            return {
+                alCentralWinner,
+                wildCard1: wildCardTeams[0]?.name || null,
+                wildCard2: wildCardTeams[1]?.name || null,
+                wildCard3: wildCardTeams[2]?.name || null
+            };
+        }
+
+        // Calculate Yankees vs Blue Jays scenarios
+        function calculateYankeesBlueJaysScenarios() {
+            const scenarios = [];
+            
+            for (let oriolesYankees = 0; oriolesYankees <= 3; oriolesYankees++) {
+                for (let raysBluejays = 0; raysBluejays <= 3; raysBluejays++) {
+                    const yankeesWins = currentStandings.yankees.wins + (3 - oriolesYankees);
+                    const bluejaysWins = currentStandings.bluejays.wins + (3 - raysBluejays);
+                    
+                    scenarios.push({
+                        oriolesYankees,
+                        raysBluejays,
+                        yankees: yankeesWins,
+                        bluejays: bluejaysWins
+                    });
+                }
+            }
+            
+            return scenarios;
+        }
+
+        // Determine Yankees/Blue Jays playoff picture
+        function determineYankeesBlueJaysPlayoff(scenario) {
+            const yankeesWins = scenario.yankees;
+            const bluejaysWins = scenario.bluejays;
+            
+            if (yankeesWins > bluejaysWins) {
+                return { alEastWinner: 'Yankees', wildCard1: 'Blue Jays' };
+            } else if (bluejaysWins > yankeesWins) {
+                return { alEastWinner: 'Blue Jays', wildCard1: 'Yankees' };
+            } else {
+                // Tie - Blue Jays win on tiebreaker
+                return { alEastWinner: 'Blue Jays', wildCard1: 'Yankees' };
+            }
+        }
+
+        // Generate the infographic data
+        function generateInfographic() {
+            const scenarios = calculateAllScenarios();
+            const yankeesScenarios = calculateYankeesBlueJaysScenarios();
+            
+            // Count outcomes for main 4 teams
+            const teamStats = {
+                'Guardians': { division: 0, wildCard1: 0, wildCard2: 0, wildCard3: 0, noPlayoff: 0 },
+                'Tigers': { division: 0, wildCard1: 0, wildCard2: 0, wildCard3: 0, noPlayoff: 0 },
+                'Red Sox': { division: 0, wildCard1: 0, wildCard2: 0, wildCard3: 0, noPlayoff: 0 },
+                'Astros': { division: 0, wildCard1: 0, wildCard2: 0, wildCard3: 0, noPlayoff: 0 }
+            };
+
+            // Count outcomes for Yankees/Blue Jays
+            const yankeesStats = {
+                'Yankees': { alEast: 0, wildCard1: 0, wildCard2: 0, wildCard3: 0 },
+                'Blue Jays': { alEast: 0, wildCard1: 0, wildCard2: 0, wildCard3: 0 }
+            };
+
+            // Process main scenarios
+            scenarios.forEach(scenario => {
+                const playoffPicture = determinePlayoffPicture(scenario);
+                
+                // Count division winner
+                teamStats[playoffPicture.alCentralWinner].division++;
+                
+                // Count wild card spots
+                if (playoffPicture.wildCard1) teamStats[playoffPicture.wildCard1].wildCard1++;
+                if (playoffPicture.wildCard2) teamStats[playoffPicture.wildCard2].wildCard2++;
+                if (playoffPicture.wildCard3) teamStats[playoffPicture.wildCard3].wildCard3++;
+                
+                // Count no playoff for teams not in any spot
+                Object.keys(teamStats).forEach(team => {
+                    if (team !== playoffPicture.alCentralWinner && 
+                        team !== playoffPicture.wildCard1 && 
+                        team !== playoffPicture.wildCard2 && 
+                        team !== playoffPicture.wildCard3) {
+                        teamStats[team].noPlayoff++;
+                    }
+                });
+            });
+
+            // Process Yankees/Blue Jays scenarios
+            yankeesScenarios.forEach(scenario => {
+                const playoffPicture = determineYankeesBlueJaysPlayoff(scenario);
+                
+                yankeesStats[playoffPicture.alEastWinner].alEast++;
+                yankeesStats[playoffPicture.wildCard1].wildCard1++;
+            });
+
+            // Display main table
+            const tbody = document.getElementById('scenarios-body');
+            tbody.innerHTML = '';
+            
+            Object.entries(teamStats).forEach(([team, stats]) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="team-name">${team}</td>
+                    <td class="division-winner">${(stats.division / 64 * 100).toFixed(1)}%</td>
+                    <td class="wild-card">${(stats.wildCard1 / 64 * 100).toFixed(1)}%</td>
+                    <td class="wild-card">${(stats.wildCard2 / 64 * 100).toFixed(1)}%</td>
+                    <td class="wild-card">${(stats.wildCard3 / 64 * 100).toFixed(1)}%</td>
+                    <td class="no-playoff">${(stats.noPlayoff / 64 * 100).toFixed(1)}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Display Yankees/Blue Jays table
+            const yankeesTbody = document.getElementById('yankees-body');
+            yankeesTbody.innerHTML = '';
+            
+            Object.entries(yankeesStats).forEach(([team, stats]) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="team-name">${team}</td>
+                    <td class="division-winner">${(stats.alEast / 16 * 100).toFixed(1)}%</td>
+                    <td class="wild-card">${(stats.wildCard1 / 16 * 100).toFixed(1)}%</td>
+                    <td class="wild-card">0.0%</td>
+                    <td class="wild-card">0.0%</td>
+                `;
+                yankeesTbody.appendChild(row);
+            });
+        }
+
+        // Initialize the infographic
+        generateInfographic();
+    </script>
+</body>
+</html>

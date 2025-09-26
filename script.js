@@ -1070,7 +1070,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 46.9,
                     'wc2': 0,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 0
                 },
                 'bluejays': {
                     '1-seed': 46.9,
@@ -1078,7 +1079,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 53.1,
                     'wc2': 0,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 0
                 },
                 'guardians': {
                     '1-seed': 0,
@@ -1086,7 +1088,8 @@ class PlayoffSimulator {
                     '3-seed': 43.8,
                     'wc1': 0,
                     'wc2': 28.1,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 28.1
                 },
                 'tigers': {
                     '1-seed': 0,
@@ -1094,7 +1097,8 @@ class PlayoffSimulator {
                     '3-seed': 31.3,
                     'wc1': 0,
                     'wc2': 21.9,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 46.8
                 },
                 'redsox': {
                     '1-seed': 0,
@@ -1102,7 +1106,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 34.4,
-                    'wc3': 25.0
+                    'wc3': 25.0,
+                    'eliminated': 40.6
                 },
                 'astros': {
                     '1-seed': 0,
@@ -1110,7 +1115,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 15.6,
-                    'wc3': 34.4
+                    'wc3': 34.4,
+                    'eliminated': 50.0
                 }
             };
         } else {
@@ -1121,7 +1127,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 0
                 },
                 'phillies': {
                     '1-seed': 0,
@@ -1129,7 +1136,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 0
                 },
                 'dodgers': {
                     '1-seed': 0,
@@ -1137,7 +1145,8 @@ class PlayoffSimulator {
                     '3-seed': 100,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 0
                 },
                 'cubs': {
                     '1-seed': 0,
@@ -1145,7 +1154,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 50,
                     'wc2': 50,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 0
                 },
                 'padres': {
                     '1-seed': 0,
@@ -1153,7 +1163,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 50,
                     'wc2': 50,
-                    'wc3': 0
+                    'wc3': 0,
+                    'eliminated': 0
                 },
                 'mets': {
                     '1-seed': 0,
@@ -1161,7 +1172,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 53.1
+                    'wc3': 53.1,
+                    'eliminated': 46.9
                 },
                 'reds': {
                     '1-seed': 0,
@@ -1169,7 +1181,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 28.1
+                    'wc3': 28.1,
+                    'eliminated': 71.9
                 },
                 'diamondbacks': {
                     '1-seed': 0,
@@ -1177,7 +1190,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 18.8
+                    'wc3': 18.8,
+                    'eliminated': 81.2
                 }
             };
         }
@@ -1208,6 +1222,7 @@ class PlayoffSimulator {
                 <td class="percentage ${this.getPercentageClass(percentages['wc1'])}">${percentages['wc1'] > 0 ? percentages['wc1'].toFixed(1) + '%' : '—'}</td>
                 <td class="percentage ${this.getPercentageClass(percentages['wc2'])}">${percentages['wc2'] > 0 ? percentages['wc2'].toFixed(1) + '%' : '—'}</td>
                 <td class="percentage ${this.getPercentageClass(percentages['wc3'])}">${percentages['wc3'] > 0 ? percentages['wc3'].toFixed(1) + '%' : '—'}</td>
+                <td class="percentage ${this.getPercentageClass(percentages['eliminated'])}">${percentages['eliminated'] > 0 ? percentages['eliminated'].toFixed(1) + '%' : '—'}</td>
             `;
             tbody.appendChild(row);
         });

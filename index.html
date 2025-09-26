@@ -306,7 +306,7 @@
                 </div>
             </div>
             <div class="live-note">
-                <p><em>Note: Currently displaying simulated data. In a full implementation, this would connect to the official MLB API for real-time game data.</em></p>
+                <p><em>Note: Now using live data from the official MLB Stats API. If the API is unavailable, simulated data will be shown as fallback.</em></p>
             </div>
             <div class="live-games" id="live-games">
                 <!-- Live game data will be populated here -->
@@ -338,8 +338,24 @@
                 <!-- Will be populated by JavaScript -->
             </div>
         </div>
+
+        <div class="permutation-section" id="permutation-section">
+            <h2>📊 Playoff Permutations Chart</h2>
+            <p class="permutation-description">Explore all possible playoff scenarios based on different game outcomes</p>
+            <div class="chart-controls">
+                <button id="generate-permutations" class="chart-btn">Generate All Permutations</button>
+                <button id="clear-chart" class="chart-btn secondary">Clear Chart</button>
+            </div>
+            <div class="chart-container" id="chart-container">
+                <canvas id="permutation-chart" width="800" height="400"></canvas>
+            </div>
+            <div class="chart-info" id="chart-info">
+                <!-- Chart information will be displayed here -->
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

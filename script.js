@@ -15,7 +15,9 @@ class PlayoffSimulator {
                 redsox: { wins: 87, losses: 72, gamesLeft: 3 },
                 astros: { wins: 85, losses: 74, gamesLeft: 3 },
                 orioles: { wins: 75, losses: 84, gamesLeft: 3 },
-                rays: { wins: 77, losses: 82, gamesLeft: 3 }
+                rays: { wins: 77, losses: 82, gamesLeft: 3 },
+                rangers: { wins: 80, losses: 79, gamesLeft: 3 },
+                angels: { wins: 71, losses: 88, gamesLeft: 3 }
             },
             // National League
             nl: {
@@ -24,7 +26,11 @@ class PlayoffSimulator {
                 dodgers: { wins: 90, losses: 69, gamesLeft: 3 },
                 cubs: { wins: 89, losses: 70, gamesLeft: 3 },
                 padres: { wins: 87, losses: 72, gamesLeft: 3 },
-                mets: { wins: 82, losses: 77, gamesLeft: 3 }
+                mets: { wins: 82, losses: 77, gamesLeft: 3 },
+                cardinals: { wins: 86, losses: 73, gamesLeft: 3 },
+                diamondbacks: { wins: 86, losses: 73, gamesLeft: 3 },
+                marlins: { wins: 85, losses: 74, gamesLeft: 3 },
+                reds: { wins: 85, losses: 74, gamesLeft: 3 }
             }
         };
 
@@ -51,6 +57,7 @@ class PlayoffSimulator {
         };
 
         this.currentLeague = 'al';
+        this.permutationChart = null;
 
         this.initializeEventListeners();
         this.initializeOverallRecords();
@@ -102,6 +109,15 @@ class PlayoffSimulator {
             } else {
                 bracketSection.classList.remove('hidden');
             }
+        });
+
+        // Chart event listeners
+        document.getElementById('generate-permutations').addEventListener('click', () => {
+            this.generatePermutationChart();
+        });
+
+        document.getElementById('clear-chart').addEventListener('click', () => {
+            this.clearPermutationChart();
         });
     }
 
@@ -732,54 +748,181 @@ class PlayoffSimulator {
     }
 
     async fetchLiveGameData() {
-        // Simulated live data - replace with actual MLB API calls
-        // For demonstration, we'll return mock data that represents current games
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    games: [
-                        {
-                            id: 'game1',
-                            homeTeam: 'Guardians',
-                            awayTeam: 'Rangers',
-                            homeScore: 4,
-                            awayScore: 2,
-                            status: 'Final',
-                            inning: '9',
-                            time: '2:45 PM ET'
-                        },
-                        {
-                            id: 'game2',
-                            homeTeam: 'Tigers',
-                            awayTeam: 'Red Sox',
-                            homeScore: 1,
-                            awayScore: 3,
-                            status: 'Final',
-                            inning: '9',
-                            time: '3:12 PM ET'
-                        },
-                        {
-                            id: 'game3',
-                            homeTeam: 'Angels',
-                            awayTeam: 'Astros',
-                            homeScore: 0,
-                            awayScore: 0,
-                            status: 'Scheduled',
-                            inning: '',
-                            time: '7:05 PM ET'
+        try {
+            // Fetch live data from MLB Stats API
+            const [standingsResponse, scheduleResponse] = await Promise.all([
+                fetch('https://statsapi.mlb.com/api/v1/standings?season=2025&leagueId=103,104'),
+                fetch('https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=' + new Date().toISOString().split('T')[0])
+            ]);
+
+            if (!standingsResponse.ok || !scheduleResponse.ok) {
+                throw new Error('Failed to fetch live data from MLB API');
+            }
+
+            const standingsData = await standingsResponse.json();
+            const scheduleData = await scheduleResponse.json();
+
+            // Process standings data
+            const processedStandings = this.processStandingsData(standingsData);
+            
+            // Process schedule data for today's games
+            const todaysGames = this.processScheduleData(scheduleData);
+
+            return {
+                games: todaysGames,
+                standings: processedStandings
+            };
+
+        } catch (error) {
+            console.error('Error fetching live data:', error);
+            // Fallback to simulated data if API fails
+            return this.getFallbackData();
+        }
+    }
+
+    processStandingsData(standingsData) {
+        const standings = {};
+        
+        // Process AL standings
+        if (standingsData.records && standingsData.records.length > 0) {
+            standingsData.records.forEach(division => {
+                if (division.league && division.league.id === 103) { // AL
+                    division.teamRecords.forEach(team => {
+                        const teamKey = this.getTeamKey(team.team.name);
+                        if (teamKey) {
+                            standings[teamKey] = {
+                                wins: team.wins,
+                                losses: team.losses
+                            };
                         }
-                    ],
-                    standings: {
-                        yankees: { wins: 91, losses: 68 },
-                        bluejays: { wins: 91, losses: 68 },
-                        guardians: { wins: 87, losses: 73 }, // +1 win from game
-                        tigers: { wins: 86, losses: 74 }, // +1 loss from game
-                        redsox: { wins: 88, losses: 72 }, // +1 win from game
-                        astros: { wins: 85, losses: 74 }
+                    });
+                }
+            });
+        }
+
+        return standings;
+    }
+
+    processScheduleData(scheduleData) {
+        const games = [];
+        
+        if (scheduleData.dates && scheduleData.dates.length > 0) {
+            const todaysDate = scheduleData.dates[0];
+            if (todaysDate.games) {
+                todaysDate.games.forEach(game => {
+                    // Only include games for teams we're tracking
+                    const homeTeamKey = this.getTeamKey(game.teams.home.team.name);
+                    const awayTeamKey = this.getTeamKey(game.teams.away.team.name);
+                    
+                    if (homeTeamKey && awayTeamKey) {
+                        games.push({
+                            id: game.gamePk.toString(),
+                            homeTeam: game.teams.home.team.name,
+                            awayTeam: game.teams.away.team.name,
+                            homeScore: game.teams.home.score || 0,
+                            awayScore: game.teams.away.score || 0,
+                            status: this.getGameStatus(game.status.detailedState),
+                            inning: game.linescore ? game.linescore.currentInning : '',
+                            time: this.formatGameTime(game.gameDate)
+                        });
                     }
                 });
-            }, 1000);
+            }
+        }
+
+        return games;
+    }
+
+    getTeamKey(teamName) {
+        const teamMap = {
+            'New York Yankees': 'yankees',
+            'Toronto Blue Jays': 'bluejays',
+            'Cleveland Guardians': 'guardians',
+            'Detroit Tigers': 'tigers',
+            'Boston Red Sox': 'redsox',
+            'Houston Astros': 'astros',
+            'Baltimore Orioles': 'orioles',
+            'Tampa Bay Rays': 'rays',
+            'Texas Rangers': 'rangers',
+            'Los Angeles Angels': 'angels',
+            'Milwaukee Brewers': 'brewers',
+            'Philadelphia Phillies': 'phillies',
+            'Los Angeles Dodgers': 'dodgers',
+            'Chicago Cubs': 'cubs',
+            'San Diego Padres': 'padres',
+            'New York Mets': 'mets',
+            'St. Louis Cardinals': 'cardinals',
+            'Arizona Diamondbacks': 'diamondbacks',
+            'Miami Marlins': 'marlins',
+            'Cincinnati Reds': 'reds'
+        };
+        return teamMap[teamName];
+    }
+
+    getGameStatus(detailedState) {
+        const statusMap = {
+            'Final': 'Final',
+            'In Progress': 'Live',
+            'Scheduled': 'Scheduled',
+            'Postponed': 'Postponed',
+            'Cancelled': 'Cancelled'
+        };
+        return statusMap[detailedState] || 'Scheduled';
+    }
+
+    formatGameTime(gameDate) {
+        const date = new Date(gameDate);
+        return date.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            timeZoneName: 'short'
         });
+    }
+
+    getFallbackData() {
+        // Fallback simulated data if API fails
+        return {
+            games: [
+                {
+                    id: 'game1',
+                    homeTeam: 'Guardians',
+                    awayTeam: 'Rangers',
+                    homeScore: 4,
+                    awayScore: 2,
+                    status: 'Final',
+                    inning: '9',
+                    time: '2:45 PM ET'
+                },
+                {
+                    id: 'game2',
+                    homeTeam: 'Tigers',
+                    awayTeam: 'Red Sox',
+                    homeScore: 1,
+                    awayScore: 3,
+                    status: 'Final',
+                    inning: '9',
+                    time: '3:12 PM ET'
+                },
+                {
+                    id: 'game3',
+                    homeTeam: 'Angels',
+                    awayTeam: 'Astros',
+                    homeScore: 0,
+                    awayScore: 0,
+                    status: 'Scheduled',
+                    inning: '',
+                    time: '7:05 PM ET'
+                }
+            ],
+            standings: {
+                yankees: { wins: 91, losses: 68 },
+                bluejays: { wins: 91, losses: 68 },
+                guardians: { wins: 87, losses: 73 },
+                tigers: { wins: 86, losses: 74 },
+                redsox: { wins: 88, losses: 72 },
+                astros: { wins: 85, losses: 74 }
+            }
+        };
     }
 
     displayLiveGames(data) {
@@ -874,6 +1017,208 @@ class PlayoffSimulator {
     displayError(message) {
         const container = document.getElementById('live-games');
         container.innerHTML = `<div class="error">${message}</div>`;
+    }
+
+    // Permutation Chart Methods
+    generatePermutationChart() {
+        const permutations = this.calculateAllPermutations();
+        this.createPermutationChart(permutations);
+        this.displayChartInfo(permutations);
+    }
+
+    calculateAllPermutations() {
+        const permutations = [];
+        const sliderIds = this.currentLeague === 'al' 
+            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays']
+            : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
+
+        // Generate all possible combinations (4^5 = 1024 for AL, 4^4 = 256 for NL)
+        const maxValue = 3;
+        const numSliders = sliderIds.length;
+        const totalPermutations = Math.pow(maxValue + 1, numSliders);
+
+        for (let i = 0; i < totalPermutations; i++) {
+            const sliderValues = {};
+            let temp = i;
+            
+            // Convert to base-4 representation
+            for (let j = 0; j < numSliders; j++) {
+                sliderValues[sliderIds[j]] = temp % (maxValue + 1);
+                temp = Math.floor(temp / (maxValue + 1));
+            }
+
+            // Calculate final standings for this permutation
+            const finalStandings = this.calculateFinalStandings(sliderValues);
+            const playoffPicture = this.determinePlayoffPicture(finalStandings);
+            
+            // Count playoff teams
+            const playoffTeams = this.countPlayoffTeams(playoffPicture);
+            
+            permutations.push({
+                id: i,
+                sliderValues: sliderValues,
+                finalStandings: finalStandings,
+                playoffPicture: playoffPicture,
+                playoffTeams: playoffTeams
+            });
+        }
+
+        return permutations;
+    }
+
+    countPlayoffTeams(playoffPicture) {
+        if (this.currentLeague === 'al') {
+            return [playoffPicture.aleastWinner, playoffPicture.alcentralWinner, 
+                   playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3]
+                   .filter(team => team).length;
+        } else {
+            return [playoffPicture.nlTopSeed, playoffPicture.nlSecondSeed, playoffPicture.nlThirdSeed,
+                   playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3]
+                   .filter(team => team).length;
+        }
+    }
+
+    createPermutationChart(permutations) {
+        const ctx = document.getElementById('permutation-chart').getContext('2d');
+        
+        // Destroy existing chart if it exists
+        if (this.permutationChart) {
+            this.permutationChart.destroy();
+        }
+
+        // Group permutations by playoff team count
+        const groupedData = {};
+        permutations.forEach(perm => {
+            const count = perm.playoffTeams;
+            if (!groupedData[count]) {
+                groupedData[count] = 0;
+            }
+            groupedData[count]++;
+        });
+
+        const labels = Object.keys(groupedData).sort((a, b) => parseInt(a) - parseInt(b));
+        const data = labels.map(label => groupedData[label]);
+
+        this.permutationChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels.map(label => `${label} Playoff Teams`),
+                datasets: [{
+                    label: 'Number of Scenarios',
+                    data: data,
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `Playoff Scenarios Distribution - ${this.currentLeague.toUpperCase()}`,
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of Scenarios'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Playoff Teams'
+                        }
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const playoffCount = labels[index];
+                        this.showDetailedScenarios(permutations, parseInt(playoffCount));
+                    }
+                }
+            }
+        });
+    }
+
+    showDetailedScenarios(permutations, playoffCount) {
+        const filteredPerms = permutations.filter(perm => perm.playoffTeams === playoffCount);
+        const infoDiv = document.getElementById('chart-info');
+        
+        infoDiv.innerHTML = `
+            <h4>Scenarios with ${playoffCount} Playoff Teams (${filteredPerms.length} total)</h4>
+            <p>Click on a bar to see detailed scenarios for that playoff team count.</p>
+            <div style="max-height: 200px; overflow-y: auto;">
+                ${filteredPerms.slice(0, 10).map(perm => this.formatScenario(perm)).join('')}
+                ${filteredPerms.length > 10 ? `<p><em>... and ${filteredPerms.length - 10} more scenarios</em></p>` : ''}
+            </div>
+        `;
+    }
+
+    formatScenario(perm) {
+        const teams = this.currentLeague === 'al' 
+            ? ['Guardians', 'Tigers', 'Red Sox', 'Astros', 'Yankees', 'Blue Jays']
+            : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets'];
+        
+        const teamKeys = this.currentLeague === 'al' 
+            ? ['guardians', 'tigers', 'redsox', 'astros', 'yankees', 'bluejays']
+            : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets'];
+
+        const records = teamKeys.map(key => {
+            const team = perm.finalStandings[key];
+            return team ? `${key}: ${team.wins}-${team.losses}` : '';
+        }).filter(record => record).join(', ');
+
+        return `<div style="margin: 5px 0; padding: 8px; background: rgba(102, 126, 234, 0.1); border-radius: 4px; font-size: 0.85rem;">
+            <strong>Scenario ${perm.id + 1}:</strong> ${records}
+        </div>`;
+    }
+
+    displayChartInfo(permutations) {
+        const infoDiv = document.getElementById('chart-info');
+        const totalPermutations = permutations.length;
+        const playoffCounts = {};
+        
+        permutations.forEach(perm => {
+            const count = perm.playoffTeams;
+            playoffCounts[count] = (playoffCounts[count] || 0) + 1;
+        });
+
+        const mostCommon = Object.keys(playoffCounts).reduce((a, b) => 
+            playoffCounts[a] > playoffCounts[b] ? a : b
+        );
+
+        infoDiv.innerHTML = `
+            <h4>Permutation Analysis</h4>
+            <p><strong>Total Scenarios:</strong> ${totalPermutations.toLocaleString()}</p>
+            <p><strong>Most Common Outcome:</strong> ${mostCommon} playoff teams (${playoffCounts[mostCommon]} scenarios)</p>
+            <p><strong>Click on any bar</strong> to see detailed scenarios for that playoff team count.</p>
+        `;
+    }
+
+    clearPermutationChart() {
+        if (this.permutationChart) {
+            this.permutationChart.destroy();
+            this.permutationChart = null;
+        }
+        document.getElementById('chart-info').innerHTML = '';
     }
 }
 

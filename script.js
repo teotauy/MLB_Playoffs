@@ -727,6 +727,7 @@ class PlayoffSimulator {
         } catch (error) {
             console.error('Error loading live data:', error);
             this.displayError('Failed to load live game data. Please try again.');
+            this.updateLastUpdated('Error loading data');
         }
     }
 
@@ -828,15 +829,21 @@ class PlayoffSimulator {
         
         // Calculate final standings based on remaining games
         const finalStandings = {};
+        const currentLeagueStandings = this.currentStandings[this.currentLeague];
+        
         Object.keys(liveStandings).forEach(team => {
             const current = liveStandings[team];
-            const remainingGames = this.currentStandings[team].gamesLeft;
+            const teamData = currentLeagueStandings[team];
             
-            finalStandings[team] = {
-                wins: current.wins,
-                losses: current.losses,
-                totalGames: current.wins + current.losses + remainingGames
-            };
+            if (teamData) {
+                const remainingGames = teamData.gamesLeft;
+                
+                finalStandings[team] = {
+                    wins: current.wins,
+                    losses: current.losses,
+                    totalGames: current.wins + current.losses + remainingGames
+                };
+            }
         });
 
         const playoffPicture = this.determinePlayoffPicture(finalStandings);

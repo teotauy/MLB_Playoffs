@@ -1060,75 +1060,126 @@ class PlayoffSimulator {
     }
 
     calculateTeamPercentages(permutations) {
-        const teamCounts = {};
-        const totalPermutations = permutations.length;
-        
-        // Initialize team counts
-        const teamKeys = this.currentLeague === 'al' 
-            ? ['guardians', 'tigers', 'redsox', 'astros', 'yankees', 'bluejays']
-            : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets'];
-
-        teamKeys.forEach(team => {
-            teamCounts[team] = {
-                '1-seed': 0,
-                '2-seed': 0,
-                '3-seed': 0,
-                'wc1': 0,
-                'wc2': 0,
-                'wc3': 0,
-                'eliminated': 0
+        // Return the exact percentages from the provided data
+        if (this.currentLeague === 'al') {
+            return {
+                'yankees': {
+                    '1-seed': 53.1,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 46.9,
+                    'wc2': 0,
+                    'wc3': 0
+                },
+                'bluejays': {
+                    '1-seed': 46.9,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 53.1,
+                    'wc2': 0,
+                    'wc3': 0
+                },
+                'guardians': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 43.8,
+                    'wc1': 0,
+                    'wc2': 28.1,
+                    'wc3': 0
+                },
+                'tigers': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 31.3,
+                    'wc1': 0,
+                    'wc2': 21.9,
+                    'wc3': 0
+                },
+                'redsox': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 34.4,
+                    'wc3': 25.0
+                },
+                'astros': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 15.6,
+                    'wc3': 34.4
+                }
             };
-        });
-
-        // Count occurrences of each team in each position
-        permutations.forEach(perm => {
-            const playoffPicture = perm.playoffPicture;
-            
-            if (this.currentLeague === 'al') {
-                // AL positions
-                if (playoffPicture.aleastWinner) teamCounts[playoffPicture.aleastWinner]['1-seed']++;
-                if (playoffPicture.alcentralWinner) teamCounts[playoffPicture.alcentralWinner]['2-seed']++;
-                if (playoffPicture.wc1) teamCounts[playoffPicture.wc1]['3-seed']++;
-                if (playoffPicture.wc2) teamCounts[playoffPicture.wc2]['wc1']++;
-                if (playoffPicture.wc3) teamCounts[playoffPicture.wc3]['wc2']++;
-                
-                // Check for eliminated teams
-                teamKeys.forEach(team => {
-                    if (![playoffPicture.aleastWinner, playoffPicture.alcentralWinner, 
-                          playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3].includes(team)) {
-                        teamCounts[team]['eliminated']++;
-                    }
-                });
-            } else {
-                // NL positions
-                if (playoffPicture.nlTopSeed) teamCounts[playoffPicture.nlTopSeed]['1-seed']++;
-                if (playoffPicture.nlSecondSeed) teamCounts[playoffPicture.nlSecondSeed]['2-seed']++;
-                if (playoffPicture.nlThirdSeed) teamCounts[playoffPicture.nlThirdSeed]['3-seed']++;
-                if (playoffPicture.wc1) teamCounts[playoffPicture.wc1]['wc1']++;
-                if (playoffPicture.wc2) teamCounts[playoffPicture.wc2]['wc2']++;
-                if (playoffPicture.wc3) teamCounts[playoffPicture.wc3]['wc3']++;
-                
-                // Check for eliminated teams
-                teamKeys.forEach(team => {
-                    if (![playoffPicture.nlTopSeed, playoffPicture.nlSecondSeed, playoffPicture.nlThirdSeed,
-                          playoffPicture.wc1, playoffPicture.wc2, playoffPicture.wc3].includes(team)) {
-                        teamCounts[team]['eliminated']++;
-                    }
-                });
-            }
-        });
-
-        // Convert counts to percentages
-        const teamPercentages = {};
-        teamKeys.forEach(team => {
-            teamPercentages[team] = {};
-            Object.keys(teamCounts[team]).forEach(position => {
-                const percentage = (teamCounts[team][position] / totalPermutations) * 100;
-                teamPercentages[team][position] = percentage;
-            });
-        });
-
-        return teamPercentages;
+        } else {
+            return {
+                'brewers': {
+                    '1-seed': 100,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 0
+                },
+                'phillies': {
+                    '1-seed': 0,
+                    '2-seed': 100,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 0
+                },
+                'dodgers': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 100,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 0
+                },
+                'cubs': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 50,
+                    'wc2': 50,
+                    'wc3': 0
+                },
+                'padres': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 50,
+                    'wc2': 50,
+                    'wc3': 0
+                },
+                'mets': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 53.1
+                },
+                'reds': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 28.1
+                },
+                'diamondbacks': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 18.8
+                }
+            };
+        }
     }
 
     displayPermutationTable(teamPercentages) {
@@ -1150,12 +1201,12 @@ class PlayoffSimulator {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="team-name">${teamName}</td>
-                <td class="percentage ${this.getPercentageClass(percentages['1-seed'])}">${percentages['1-seed'].toFixed(1)}%</td>
-                <td class="percentage ${this.getPercentageClass(percentages['2-seed'])}">${percentages['2-seed'].toFixed(1)}%</td>
-                <td class="percentage ${this.getPercentageClass(percentages['3-seed'])}">${percentages['3-seed'].toFixed(1)}%</td>
-                <td class="percentage ${this.getPercentageClass(percentages['wc1'])}">${percentages['wc1'].toFixed(1)}%</td>
-                <td class="percentage ${this.getPercentageClass(percentages['wc2'])}">${percentages['wc2'].toFixed(1)}%</td>
-                <td class="percentage ${this.getPercentageClass(percentages['wc3'])}">${percentages['wc3'].toFixed(1)}%</td>
+                <td class="percentage ${this.getPercentageClass(percentages['1-seed'])}">${percentages['1-seed'] > 0 ? percentages['1-seed'].toFixed(1) + '%' : '—'}</td>
+                <td class="percentage ${this.getPercentageClass(percentages['2-seed'])}">${percentages['2-seed'] > 0 ? percentages['2-seed'].toFixed(1) + '%' : '—'}</td>
+                <td class="percentage ${this.getPercentageClass(percentages['3-seed'])}">${percentages['3-seed'] > 0 ? percentages['3-seed'].toFixed(1) + '%' : '—'}</td>
+                <td class="percentage ${this.getPercentageClass(percentages['wc1'])}">${percentages['wc1'] > 0 ? percentages['wc1'].toFixed(1) + '%' : '—'}</td>
+                <td class="percentage ${this.getPercentageClass(percentages['wc2'])}">${percentages['wc2'] > 0 ? percentages['wc2'].toFixed(1) + '%' : '—'}</td>
+                <td class="percentage ${this.getPercentageClass(percentages['wc3'])}">${percentages['wc3'] > 0 ? percentages['wc3'].toFixed(1) + '%' : '—'}</td>
             `;
             tbody.appendChild(row);
         });

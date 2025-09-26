@@ -174,6 +174,7 @@ class PlayoffSimulator {
         
         this.setupSliderListeners();
         this.updateSimulation();
+        this.generatePermutationTable();
     }
 
     setupSliderListeners() {
@@ -1187,12 +1188,12 @@ class PlayoffSimulator {
         tbody.innerHTML = '';
 
         const teamKeys = this.currentLeague === 'al' 
-            ? ['guardians', 'tigers', 'redsox', 'astros', 'yankees', 'bluejays']
-            : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets'];
+            ? ['yankees', 'bluejays', 'guardians', 'tigers', 'redsox', 'astros']
+            : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets', 'reds', 'diamondbacks'];
 
         const teamNames = this.currentLeague === 'al' 
-            ? ['Guardians', 'Tigers', 'Red Sox', 'Astros', 'Yankees', 'Blue Jays']
-            : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets'];
+            ? ['Yankees', 'Blue Jays', 'Guardians', 'Tigers', 'Red Sox', 'Astros']
+            : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets', 'Reds', 'Diamondbacks'];
 
         teamKeys.forEach((teamKey, index) => {
             const teamName = teamNames[index];
@@ -1223,7 +1224,7 @@ class PlayoffSimulator {
         const totalPermutations = permutations.length;
         
         infoDiv.innerHTML = `
-            <h4>Permutation Analysis</h4>
+            <h4>${this.currentLeague.toUpperCase()} Permutation Analysis</h4>
             <p><strong>Total Scenarios:</strong> ${totalPermutations.toLocaleString()}</p>
             <p><strong>Based on:</strong> ${this.currentLeague === 'al' ? '5 series with 4 possible outcomes each (0-3 wins)' : '4 series with 4 possible outcomes each (0-3 wins)'}</p>
             <p><strong>Calculation:</strong> ${this.currentLeague === 'al' ? '4^5 = 1,024 scenarios' : '4^4 = 256 scenarios'}</p>

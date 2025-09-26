@@ -625,13 +625,19 @@ class PlayoffSimulator {
             // AL Wild Card Series
             const wcSeries = [
                 {
-                    matchup: `${this.getTeamName(playoffPicture.aleastWinner)} vs ${this.getTeamName(playoffPicture.wc3)}`,
-                    date: 'Oct 1-3',
+                    awayTeam: this.getTeamName(playoffPicture.wc3),
+                    homeTeam: this.getTeamName(playoffPicture.aleastWinner),
+                    awaySeed: 'WC3',
+                    homeSeed: '1',
+                    date: 'Sep 30 - Oct 2',
                     note: 'Wild Card Series'
                 },
                 {
-                    matchup: `${this.getTeamName(playoffPicture.alcentralWinner)} vs ${this.getTeamName(playoffPicture.wc2)}`,
-                    date: 'Oct 1-3', 
+                    awayTeam: this.getTeamName(playoffPicture.wc2),
+                    homeTeam: this.getTeamName(playoffPicture.alcentralWinner),
+                    awaySeed: 'WC2',
+                    homeSeed: '3',
+                    date: 'Sep 30 - Oct 2', 
                     note: 'Wild Card Series'
                 }
             ];
@@ -640,7 +646,7 @@ class PlayoffSimulator {
                 const matchupDiv = document.createElement('div');
                 matchupDiv.className = 'bracket-matchup';
                 matchupDiv.innerHTML = `
-                    <h3>${series.matchup}</h3>
+                    <h3>${series.awayTeam} (${series.awaySeed}) @ ${series.homeTeam} (${series.homeSeed})</h3>
                     <div class="date">${series.date}</div>
                     <div class="note">${series.note}</div>
                 `;
@@ -660,13 +666,19 @@ class PlayoffSimulator {
             // NL Wild Card Series
             const wcSeries = [
                 {
-                    matchup: `${this.getTeamName(playoffPicture.nlTopSeed)} vs ${this.getTeamName(playoffPicture.wc3)}`,
-                    date: 'Oct 1-3',
+                    awayTeam: this.getTeamName(playoffPicture.wc3),
+                    homeTeam: this.getTeamName(playoffPicture.nlTopSeed),
+                    awaySeed: 'WC3',
+                    homeSeed: '1',
+                    date: 'Sep 30 - Oct 2',
                     note: 'Wild Card Series'
                 },
                 {
-                    matchup: `${this.getTeamName(playoffPicture.nlSecondSeed)} vs ${this.getTeamName(playoffPicture.wc2)}`,
-                    date: 'Oct 1-3', 
+                    awayTeam: this.getTeamName(playoffPicture.wc2),
+                    homeTeam: this.getTeamName(playoffPicture.nlSecondSeed),
+                    awaySeed: 'WC2',
+                    homeSeed: '2',
+                    date: 'Sep 30 - Oct 2', 
                     note: 'Wild Card Series'
                 }
             ];
@@ -675,7 +687,7 @@ class PlayoffSimulator {
                 const matchupDiv = document.createElement('div');
                 matchupDiv.className = 'bracket-matchup';
                 matchupDiv.innerHTML = `
-                    <h3>${series.matchup}</h3>
+                    <h3>${series.awayTeam} (${series.awaySeed}) @ ${series.homeTeam} (${series.homeSeed})</h3>
                     <div class="date">${series.date}</div>
                     <div class="note">${series.note}</div>
                 `;

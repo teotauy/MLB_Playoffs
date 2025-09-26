@@ -12,6 +12,7 @@ class PlayoffSimulator {
             al: {
                 yankees: { wins: 91, losses: 68, gamesLeft: 3 },
                 bluejays: { wins: 91, losses: 68, gamesLeft: 3 },
+                mariners: { wins: 89, losses: 70, gamesLeft: 3 },
                 guardians: { wins: 86, losses: 73, gamesLeft: 3 },
                 tigers: { wins: 86, losses: 73, gamesLeft: 3 },
                 redsox: { wins: 87, losses: 72, gamesLeft: 3 },
@@ -487,6 +488,9 @@ class PlayoffSimulator {
             }
         }
 
+        // Mariners are the definite #2 seed (AL West winner)
+        const alwestWinner = 'mariners';
+
         // Determine AL Central winner
         const guardians = teams.find(t => t.name === 'guardians');
         const tigers = teams.find(t => t.name === 'tigers');
@@ -503,7 +507,7 @@ class PlayoffSimulator {
 
         // Determine Wild Cards
         const remainingTeams = teams.filter(t => 
-            t.name !== aleastWinner && t.name !== alcentralWinner
+            t.name !== aleastWinner && t.name !== alcentralWinner && t.name !== alwestWinner
         );
 
         // Sort remaining teams by wins
@@ -519,6 +523,7 @@ class PlayoffSimulator {
 
         return {
             aleastWinner,
+            alwestWinner,
             alcentralWinner,
             wc1,
             wc2,
@@ -579,12 +584,13 @@ class PlayoffSimulator {
 
         const teams = this.currentLeague === 'al' 
             ? [
+                { name: 'Yankees', key: 'yankees' },
+                { name: 'Blue Jays', key: 'bluejays' },
+                { name: 'Mariners', key: 'mariners' },
                 { name: 'Guardians', key: 'guardians' },
                 { name: 'Tigers', key: 'tigers' },
                 { name: 'Red Sox', key: 'redsox' },
-                { name: 'Astros', key: 'astros' },
-                { name: 'Yankees', key: 'yankees' },
-                { name: 'Blue Jays', key: 'bluejays' }
+                { name: 'Astros', key: 'astros' }
             ]
             : [
                 { name: 'Brewers', key: 'brewers' },
@@ -615,6 +621,8 @@ class PlayoffSimulator {
         if (this.currentLeague === 'al') {
             if (teamKey === playoffPicture.aleastWinner) {
                 return 'AL East';
+            } else if (teamKey === playoffPicture.alwestWinner) {
+                return 'AL West';
             } else if (teamKey === playoffPicture.alcentralWinner) {
                 return 'AL Central';
             } else if (teamKey === playoffPicture.wc1) {
@@ -673,9 +681,9 @@ class PlayoffSimulator {
                 },
                 {
                     awayTeam: this.getTeamName(playoffPicture.wc2),
-                    homeTeam: this.getTeamName(playoffPicture.alcentralWinner),
+                    homeTeam: this.getTeamName(playoffPicture.alwestWinner),
                     awaySeed: 'WC2',
-                    homeSeed: '3',
+                    homeSeed: '2',
                     date: 'Sep 30 - Oct 2', 
                     note: 'Wild Card Series'
                 }
@@ -749,7 +757,8 @@ class PlayoffSimulator {
         const names = {
             // AL Teams
             'yankees': 'Yankees',
-            'bluejays': 'Blue Jays', 
+            'bluejays': 'Blue Jays',
+            'mariners': 'Mariners',
             'guardians': 'Guardians',
             'tigers': 'Tigers',
             'redsox': 'Red Sox',
@@ -772,6 +781,7 @@ class PlayoffSimulator {
             // AL Teams
             'yankees': '🗽',      // Statue of Liberty (NYC)
             'bluejays': '🐦',     // Blue Jay bird
+            'mariners': '⚓',     // Anchor (Mariners)
             'guardians': '🛡️',    // Shield (Guardians)
             'tigers': '🐅',       // Tiger
             'redsox': '🧦',       // Red sock
@@ -1188,6 +1198,15 @@ class PlayoffSimulator {
                     'wc3': 0,
                     'eliminated': 0
                 },
+                'mariners': {
+                    '1-seed': 0,
+                    '2-seed': 100,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 0,
+                    'eliminated': 0
+                },
                 'guardians': {
                     '1-seed': 0,
                     '2-seed': 0,
@@ -1308,11 +1327,11 @@ class PlayoffSimulator {
         tbody.innerHTML = '';
 
         const teamKeys = this.currentLeague === 'al' 
-            ? ['yankees', 'bluejays', 'guardians', 'tigers', 'redsox', 'astros']
+            ? ['yankees', 'bluejays', 'mariners', 'guardians', 'tigers', 'redsox', 'astros']
             : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets', 'reds', 'diamondbacks'];
 
         const teamNames = this.currentLeague === 'al' 
-            ? ['Yankees', 'Blue Jays', 'Guardians', 'Tigers', 'Red Sox', 'Astros']
+            ? ['Yankees', 'Blue Jays', 'Mariners', 'Guardians', 'Tigers', 'Red Sox', 'Astros']
             : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets', 'Reds', 'Diamondbacks'];
 
         teamKeys.forEach((teamKey, index) => {

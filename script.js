@@ -117,6 +117,19 @@ class PlayoffSimulator {
 
         // Initialize permutation table
         this.generatePermutationTable();
+        
+        // Preset scenario event listeners
+        document.getElementById('home-team-wins').addEventListener('click', () => {
+            this.applyPresetScenario('home-wins');
+        });
+        
+        document.getElementById('better-record-wins').addEventListener('click', () => {
+            this.applyPresetScenario('better-record');
+        });
+        
+        document.getElementById('reset-scenario').addEventListener('click', () => {
+            this.applyPresetScenario('reset');
+        });
     }
 
     initializeOverallRecords() {
@@ -560,7 +573,9 @@ class PlayoffSimulator {
                 { name: 'Dodgers', key: 'dodgers' },
                 { name: 'Cubs', key: 'cubs' },
                 { name: 'Padres', key: 'padres' },
-                { name: 'Mets', key: 'mets' }
+                { name: 'Mets', key: 'mets' },
+                { name: 'Reds', key: 'reds' },
+                { name: 'Diamondbacks', key: 'diamondbacks' }
             ];
 
         teams.forEach(team => {
@@ -1429,6 +1444,119 @@ class PlayoffSimulator {
                 notification.parentNode.removeChild(notification);
             }
         }, 5000);
+    }
+
+    applyPresetScenario(scenario) {
+        const sliderIds = this.currentLeague === 'al' 
+            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays']
+            : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
+
+        sliderIds.forEach(sliderId => {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
+
+            let newValue;
+            
+            switch (scenario) {
+                case 'home-wins':
+                    // Home team wins all 3 games (slider position 3)
+                    newValue = 3;
+                    break;
+                case 'better-record':
+                    // Team with better record wins all 3 games
+                    newValue = this.getBetterRecordWins(sliderId);
+                    break;
+                case 'reset':
+                    // Reset to default (away team wins all 3 games - slider position 0)
+                    newValue = 0;
+                    break;
+                default:
+                    return;
+            }
+
+            slider.value = newValue;
+            this.updateSeriesWins(sliderId, newValue);
+        });
+
+        // Update the simulation with new values
+        this.updateSimulation();
+        
+        // Show notification
+        this.showPresetNotification(scenario);
+    }
+
+    getBetterRecordWins(sliderId) {
+        // Determine which team has the better record and set slider accordingly
+        const currentStandings = this.currentStandings[this.currentLeague];
+        
+        switch (sliderId) {
+            case 'rangers-guardians':
+                return currentStandings.guardians.wins > currentStandings.rangers.wins ? 3 : 0;
+            case 'tigers-redsox':
+                return currentStandings.redsox.wins > currentStandings.tigers.wins ? 3 : 0;
+            case 'astros-angels':
+                return currentStandings.astros.wins > currentStandings.angels.wins ? 0 : 3;
+            case 'orioles-yankees':
+                return currentStandings.yankees.wins > currentStandings.orioles.wins ? 3 : 0;
+            case 'rays-bluejays':
+                return currentStandings.bluejays.wins > currentStandings.rays.wins ? 3 : 0;
+            case 'cubs-cardinals':
+                return currentStandings.cardinals.wins > currentStandings.cubs.wins ? 3 : 0;
+            case 'diamondbacks-padres':
+                return currentStandings.padres.wins > currentStandings.diamondbacks.wins ? 3 : 0;
+            case 'mets-marlins':
+                return currentStandings.marlins.wins > currentStandings.mets.wins ? 3 : 0;
+            case 'reds-brewers':
+                return currentStandings.brewers.wins > currentStandings.reds.wins ? 3 : 0;
+            default:
+                return 0;
+        }
+    }
+
+    showPresetNotification(scenario) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            max-width: 300px;
+        `;
+        
+        let message;
+        switch (scenario) {
+            case 'home-wins':
+                message = 'Applied: Home team wins every game';
+                break;
+            case 'better-record':
+                message = 'Applied: Better record wins every game';
+                break;
+            case 'reset':
+                message = 'Reset to default scenario';
+                break;
+        }
+        
+        notification.innerHTML = `
+            <strong>Scenario Applied!</strong><br>
+            ${message}<br>
+            <small>All outputs updated</small>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 3000);
     }
 }
 

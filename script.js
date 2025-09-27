@@ -669,13 +669,13 @@ class PlayoffSimulator {
         container.innerHTML = '';
 
         if (this.currentLeague === 'al') {
-            // AL Wild Card Series (only WC teams play)
+            // AL Wild Card Series - WC3 plays #3 seed (worst division winner)
             const wcSeries = [
                 {
                     awayTeam: this.getTeamName(playoffPicture.wc3),
-                    homeTeam: this.getTeamName(playoffPicture.wc2),
+                    homeTeam: this.getTeamName(playoffPicture.alcentralWinner),
                     awaySeed: 'WC3',
-                    homeSeed: 'WC2',
+                    homeSeed: '3',
                     date: 'Sep 30 - Oct 2',
                     note: 'Wild Card Series'
                 }
@@ -698,18 +698,18 @@ class PlayoffSimulator {
             aldsDiv.innerHTML = `
                 <h3>ALDS Matchups</h3>
                 <div class="date">Oct 5-10</div>
-                <div class="note">#1 ${this.getTeamName(playoffPicture.aleastWinner)} (BYE) vs WC Winner</div>
-                <div class="note">#2 ${this.getTeamName(playoffPicture.alwestWinner)} (BYE) vs #3 ${this.getTeamName(playoffPicture.alcentralWinner)}</div>
+                <div class="note">#1 ${this.getTeamName(playoffPicture.aleastWinner)} (BYE) vs WC2</div>
+                <div class="note">#2 ${this.getTeamName(playoffPicture.alwestWinner)} (BYE) vs WC3/#3 Winner</div>
             `;
             container.appendChild(aldsDiv);
         } else {
-            // NL Wild Card Series (only WC teams play)
+            // NL Wild Card Series - WC3 plays #3 seed (worst division winner)
             const wcSeries = [
                 {
                     awayTeam: this.getTeamName(playoffPicture.wc3),
-                    homeTeam: this.getTeamName(playoffPicture.wc2),
+                    homeTeam: this.getTeamName(playoffPicture.nlThirdSeed),
                     awaySeed: 'WC3',
-                    homeSeed: 'WC2',
+                    homeSeed: '3',
                     date: 'Sep 30 - Oct 2',
                     note: 'Wild Card Series'
                 }
@@ -732,8 +732,8 @@ class PlayoffSimulator {
             nldsDiv.innerHTML = `
                 <h3>NLDS Matchups</h3>
                 <div class="date">Oct 5-10</div>
-                <div class="note">#1 ${this.getTeamName(playoffPicture.nlTopSeed)} (BYE) vs WC Winner</div>
-                <div class="note">#2 ${this.getTeamName(playoffPicture.nlSecondSeed)} (BYE) vs #3 ${this.getTeamName(playoffPicture.nlThirdSeed)}</div>
+                <div class="note">#1 ${this.getTeamName(playoffPicture.nlTopSeed)} (BYE) vs WC2</div>
+                <div class="note">#2 ${this.getTeamName(playoffPicture.nlSecondSeed)} (BYE) vs WC3/#3 Winner</div>
             `;
             container.appendChild(nldsDiv);
         }

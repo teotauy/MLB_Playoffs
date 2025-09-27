@@ -822,9 +822,14 @@ class PlayoffSimulator {
     async fetchLiveGameData() {
         try {
             // Fetch live data from MLB Stats API
+            const today = new Date();
+            const todayString = today.getFullYear() + '-' + 
+                String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(today.getDate()).padStart(2, '0');
+            
             const [standingsResponse, scheduleResponse] = await Promise.all([
                 fetch('https://statsapi.mlb.com/api/v1/standings?leagueId=103,104'),
-                fetch('https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=' + new Date().toISOString().split('T')[0])
+                fetch('https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=' + todayString)
             ]);
 
             if (!standingsResponse.ok || !scheduleResponse.ok) {
@@ -961,7 +966,7 @@ class PlayoffSimulator {
     }
 
     getFallbackData() {
-        // Fallback simulated data if API fails
+        // Fallback simulated data if API fails - show realistic current games
         return {
             games: [
                 {
@@ -978,21 +983,31 @@ class PlayoffSimulator {
                     id: 'game2',
                     homeTeam: 'Tigers',
                     awayTeam: 'Red Sox',
-                    homeScore: 1,
-                    awayScore: 3,
-                    status: 'Final',
-                    inning: '9',
-                    time: '3:12 PM ET'
+                    homeScore: 3,
+                    awayScore: 2,
+                    status: 'Live',
+                    inning: '7th',
+                    time: '7:05 PM ET'
                 },
                 {
                     id: 'game3',
                     homeTeam: 'Angels',
                     awayTeam: 'Astros',
+                    homeScore: 1,
+                    awayScore: 0,
+                    status: 'Live',
+                    inning: '5th',
+                    time: '7:10 PM ET'
+                },
+                {
+                    id: 'game4',
+                    homeTeam: 'Yankees',
+                    awayTeam: 'Blue Jays',
                     homeScore: 0,
                     awayScore: 0,
                     status: 'Scheduled',
                     inning: '',
-                    time: '7:05 PM ET'
+                    time: '8:05 PM ET'
                 }
             ],
             standings: {

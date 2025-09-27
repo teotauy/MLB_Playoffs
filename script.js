@@ -246,8 +246,8 @@ class PlayoffSimulator {
 
     updateSeriesWins(sliderId, sliderValue) {
         const sliderPos = parseInt(sliderValue);
-        // Slider position 0 = away team sweeps (3 wins), position 3 = home team sweeps (3 wins)
-        const awayWins = 3 - sliderPos;
+        // Slider position 0 = away team sweeps (2 wins), position 2 = home team sweeps (2 wins)
+        const awayWins = 2 - sliderPos;
         const homeWins = sliderPos;
         
         switch(sliderId) {
@@ -394,12 +394,12 @@ class PlayoffSimulator {
             const raysSlider = parseInt(document.getElementById('rays-bluejays').value);
             
             return {
-                // Away teams get 3 minus slider position
-                rangers: 3 - rangersSlider,
-                tigers: 3 - tigersSlider,
-                astros: 3 - astrosSlider,
-                orioles: 3 - oriolesSlider,
-                rays: 3 - raysSlider,
+                // Away teams get 2 minus slider position
+                rangers: 2 - rangersSlider,
+                tigers: 2 - tigersSlider,
+                astros: 2 - astrosSlider,
+                orioles: 2 - oriolesSlider,
+                rays: 2 - raysSlider,
                 // Home teams get slider position value
                 guardians: rangersSlider,
                 redsox: tigersSlider,
@@ -415,11 +415,11 @@ class PlayoffSimulator {
             const redsWins = parseInt(document.getElementById('reds-brewers').value);
             
             return {
-                // Away teams get 3 minus slider value
-                cubs: 3 - cubsWins,
-                diamondbacks: 3 - diamondbacksWins,
-                mets: 3 - metsWins,
-                reds: 3 - redsWins,
+                // Away teams get 2 minus slider value
+                cubs: 2 - cubsWins,
+                diamondbacks: 2 - diamondbacksWins,
+                mets: 2 - metsWins,
+                reds: 2 - redsWins,
                 // Home teams get slider value
                 cardinals: cubsWins,
                 padres: diamondbacksWins,

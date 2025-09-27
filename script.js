@@ -1129,12 +1129,10 @@ class PlayoffSimulator {
     }
 
     startAutoRefresh() {
+        // Live mode now only loads data on page load, not on intervals
+        // This prevents API rate limiting and provides more reliable data
         this.stopAutoRefresh(); // Clear any existing interval
-        this.autoRefreshInterval = setInterval(() => {
-            if (this.currentMode === 'live') {
-                this.loadLiveData();
-            }
-        }, 120000); // 2 minutes
+        // No interval set - data loads only when switching to live mode
     }
 
     stopAutoRefresh() {

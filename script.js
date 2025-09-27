@@ -10,13 +10,13 @@ class PlayoffSimulator {
         this.currentStandings = {
             // American League
             al: {
-                yankees: { wins: 91, losses: 68, gamesLeft: 3 },
-                bluejays: { wins: 91, losses: 68, gamesLeft: 3 },
+                yankees: { wins: 92, losses: 68, gamesLeft: 2 },
+                bluejays: { wins: 92, losses: 68, gamesLeft: 2 },
                 mariners: { wins: 89, losses: 70, gamesLeft: 3 },
-                guardians: { wins: 86, losses: 73, gamesLeft: 3 },
-                tigers: { wins: 86, losses: 73, gamesLeft: 3 },
-                redsox: { wins: 87, losses: 72, gamesLeft: 3 },
-                astros: { wins: 85, losses: 74, gamesLeft: 3 },
+                guardians: { wins: 86, losses: 74, gamesLeft: 2 },
+                tigers: { wins: 86, losses: 74, gamesLeft: 2 },
+                redsox: { wins: 88, losses: 72, gamesLeft: 2 },
+                astros: { wins: 85, losses: 75, gamesLeft: 2 },
                 orioles: { wins: 75, losses: 84, gamesLeft: 3 },
                 rays: { wins: 77, losses: 82, gamesLeft: 3 },
                 rangers: { wins: 80, losses: 79, gamesLeft: 3 },
@@ -24,16 +24,16 @@ class PlayoffSimulator {
             },
             // National League
             nl: {
-                brewers: { wins: 96, losses: 63, gamesLeft: 3 },
+                brewers: { wins: 96, losses: 64, gamesLeft: 2 },
                 phillies: { wins: 94, losses: 65, gamesLeft: 3 },
                 dodgers: { wins: 90, losses: 69, gamesLeft: 3 },
-                cubs: { wins: 89, losses: 70, gamesLeft: 3 },
-                padres: { wins: 87, losses: 72, gamesLeft: 3 },
-                mets: { wins: 82, losses: 77, gamesLeft: 3 },
-                cardinals: { wins: 86, losses: 73, gamesLeft: 3 },
-                diamondbacks: { wins: 86, losses: 73, gamesLeft: 3 },
-                marlins: { wins: 85, losses: 74, gamesLeft: 3 },
-                reds: { wins: 85, losses: 74, gamesLeft: 3 }
+                cubs: { wins: 90, losses: 70, gamesLeft: 2 },
+                padres: { wins: 88, losses: 72, gamesLeft: 2 },
+                mets: { wins: 82, losses: 78, gamesLeft: 2 },
+                cardinals: { wins: 78, losses: 82, gamesLeft: 2 },
+                diamondbacks: { wins: 80, losses: 80, gamesLeft: 2 },
+                marlins: { wins: 78, losses: 82, gamesLeft: 2 },
+                reds: { wins: 82, losses: 78, gamesLeft: 2 }
             }
         };
 
@@ -1216,19 +1216,19 @@ class PlayoffSimulator {
         if (this.currentLeague === 'al') {
             return {
                 'yankees': {
-                    '1-seed': 53.1,
+                    '1-seed': 53,
                     '2-seed': 0,
                     '3-seed': 0,
-                    'wc1': 46.9,
+                    'wc1': 47,
                     'wc2': 0,
                     'wc3': 0,
                     'eliminated': 0
                 },
                 'bluejays': {
-                    '1-seed': 46.9,
+                    '1-seed': 47,
                     '2-seed': 0,
                     '3-seed': 0,
-                    'wc1': 53.1,
+                    'wc1': 53,
                     'wc2': 0,
                     'wc3': 0,
                     'eliminated': 0
@@ -1245,38 +1245,38 @@ class PlayoffSimulator {
                 'guardians': {
                     '1-seed': 0,
                     '2-seed': 0,
-                    '3-seed': 43.8,
+                    '3-seed': 48,
                     'wc1': 0,
-                    'wc2': 28.1,
+                    'wc2': 30,
                     'wc3': 0,
-                    'eliminated': 28.1
+                    'eliminated': 22
                 },
                 'tigers': {
                     '1-seed': 0,
                     '2-seed': 0,
-                    '3-seed': 31.3,
+                    '3-seed': 26,
                     'wc1': 0,
-                    'wc2': 21.9,
+                    'wc2': 22,
                     'wc3': 0,
-                    'eliminated': 46.8
+                    'eliminated': 52
                 },
                 'redsox': {
                     '1-seed': 0,
                     '2-seed': 0,
                     '3-seed': 0,
                     'wc1': 0,
-                    'wc2': 34.4,
-                    'wc3': 25.0,
-                    'eliminated': 40.6
+                    'wc2': 33,
+                    'wc3': 26,
+                    'eliminated': 0
                 },
                 'astros': {
                     '1-seed': 0,
                     '2-seed': 0,
                     '3-seed': 0,
                     'wc1': 0,
-                    'wc2': 15.6,
-                    'wc3': 34.4,
-                    'eliminated': 50.0
+                    'wc2': 15,
+                    'wc3': 33,
+                    'eliminated': 52
                 }
             };
         } else {
@@ -1312,8 +1312,8 @@ class PlayoffSimulator {
                     '1-seed': 0,
                     '2-seed': 0,
                     '3-seed': 0,
-                    'wc1': 50,
-                    'wc2': 50,
+                    'wc1': 48,
+                    'wc2': 52,
                     'wc3': 0,
                     'eliminated': 0
                 },
@@ -1321,8 +1321,8 @@ class PlayoffSimulator {
                     '1-seed': 0,
                     '2-seed': 0,
                     '3-seed': 0,
-                    'wc1': 50,
-                    'wc2': 50,
+                    'wc1': 52,
+                    'wc2': 48,
                     'wc3': 0,
                     'eliminated': 0
                 },
@@ -1332,8 +1332,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 53.1,
-                    'eliminated': 46.9
+                    'wc3': 59,
+                    'eliminated': 41
                 },
                 'reds': {
                     '1-seed': 0,
@@ -1341,8 +1341,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 28.1,
-                    'eliminated': 71.9
+                    'wc3': 26,
+                    'eliminated': 74
                 },
                 'diamondbacks': {
                     '1-seed': 0,
@@ -1350,8 +1350,8 @@ class PlayoffSimulator {
                     '3-seed': 0,
                     'wc1': 0,
                     'wc2': 0,
-                    'wc3': 18.8,
-                    'eliminated': 81.2
+                    'wc3': 15,
+                    'eliminated': 85
                 }
             };
         }

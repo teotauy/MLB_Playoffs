@@ -16,6 +16,7 @@ class PlayoffSimulator {
                 guardians: { wins: 87, losses: 74, gamesLeft: 1 },
                 tigers: { wins: 87, losses: 74, gamesLeft: 1 },
                 redsox: { wins: 88, losses: 73, gamesLeft: 1 },
+                astros: { wins: 85, losses: 75, gamesLeft: 1 },
                 orioles: { wins: 75, losses: 84, gamesLeft: 3 },
                 rays: { wins: 77, losses: 82, gamesLeft: 3 },
                 rangers: { wins: 80, losses: 79, gamesLeft: 3 },
@@ -245,8 +246,8 @@ class PlayoffSimulator {
 
     updateSeriesWins(sliderId, sliderValue) {
         const sliderPos = parseInt(sliderValue);
-        // Slider position 0 = away team sweeps (2 wins), position 2 = home team sweeps (2 wins)
-        const awayWins = 2 - sliderPos;
+        // Slider position 0 = away team wins (1 win), position 1 = home team wins (1 win)
+        const awayWins = 1 - sliderPos;
         const homeWins = sliderPos;
         
         switch(sliderId) {
@@ -386,11 +387,11 @@ class PlayoffSimulator {
             const raysSlider = parseInt(document.getElementById('rays-bluejays').value);
             
             return {
-                // Away teams get 2 minus slider position
-                rangers: 2 - rangersSlider,
-                tigers: 2 - tigersSlider,
-                orioles: 2 - oriolesSlider,
-                rays: 2 - raysSlider,
+                // Away teams get 1 minus slider position
+                rangers: 1 - rangersSlider,
+                tigers: 1 - tigersSlider,
+                orioles: 1 - oriolesSlider,
+                rays: 1 - raysSlider,
                 // Home teams get slider position value
                 guardians: rangersSlider,
                 redsox: tigersSlider,
@@ -405,11 +406,11 @@ class PlayoffSimulator {
             const redsWins = parseInt(document.getElementById('reds-brewers').value);
             
             return {
-                // Away teams get 2 minus slider value
-                cubs: 2 - cubsWins,
-                diamondbacks: 2 - diamondbacksWins,
-                mets: 2 - metsWins,
-                reds: 2 - redsWins,
+                // Away teams get 1 minus slider value
+                cubs: 1 - cubsWins,
+                diamondbacks: 1 - diamondbacksWins,
+                mets: 1 - metsWins,
+                reds: 1 - redsWins,
                 // Home teams get slider value
                 cardinals: cubsWins,
                 padres: diamondbacksWins,
@@ -574,12 +575,13 @@ class PlayoffSimulator {
 
         const teams = this.currentLeague === 'al' 
             ? [
-                { name: 'Yankees', key: 'yankees' },
                 { name: 'Blue Jays', key: 'bluejays' },
+                { name: 'Yankees', key: 'yankees' },
                 { name: 'Mariners', key: 'mariners' },
+                { name: 'Red Sox', key: 'redsox' },
                 { name: 'Guardians', key: 'guardians' },
                 { name: 'Tigers', key: 'tigers' },
-                { name: 'Red Sox', key: 'redsox' }
+                { name: 'Astros', key: 'astros' }
             ]
             : [
                 { name: 'Brewers', key: 'brewers' },
@@ -1204,20 +1206,20 @@ class PlayoffSimulator {
         // Return the exact percentages from the provided data
         if (this.currentLeague === 'al') {
             return {
-                'yankees': {
-                    '1-seed': 53,
+                'bluejays': {
+                    '1-seed': 67,
                     '2-seed': 0,
                     '3-seed': 0,
-                    'wc1': 47,
+                    'wc1': 33,
                     'wc2': 0,
                     'wc3': 0,
                     'eliminated': 0
                 },
-                'bluejays': {
-                    '1-seed': 47,
+                'yankees': {
+                    '1-seed': 33,
                     '2-seed': 0,
                     '3-seed': 0,
-                    'wc1': 53,
+                    'wc1': 67,
                     'wc2': 0,
                     'wc3': 0,
                     'eliminated': 0
@@ -1231,24 +1233,6 @@ class PlayoffSimulator {
                     'wc3': 0,
                     'eliminated': 0
                 },
-                'guardians': {
-                    '1-seed': 0,
-                    '2-seed': 0,
-                    '3-seed': 48,
-                    'wc1': 0,
-                    'wc2': 30,
-                    'wc3': 0,
-                    'eliminated': 22
-                },
-                'tigers': {
-                    '1-seed': 0,
-                    '2-seed': 0,
-                    '3-seed': 26,
-                    'wc1': 0,
-                    'wc2': 22,
-                    'wc3': 0,
-                    'eliminated': 52
-                },
                 'redsox': {
                     '1-seed': 0,
                     '2-seed': 0,
@@ -1257,6 +1241,33 @@ class PlayoffSimulator {
                     'wc2': 100,
                     'wc3': 0,
                     'eliminated': 0
+                },
+                'guardians': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 67,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 33,
+                    'eliminated': 0
+                },
+                'tigers': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 33,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 67,
+                    'eliminated': 0
+                },
+                'astros': {
+                    '1-seed': 0,
+                    '2-seed': 0,
+                    '3-seed': 0,
+                    'wc1': 0,
+                    'wc2': 0,
+                    'wc3': 0,
+                    'eliminated': 100
                 }
             };
         } else {
@@ -1342,11 +1353,11 @@ class PlayoffSimulator {
         tbody.innerHTML = '';
 
         const teamKeys = this.currentLeague === 'al' 
-            ? ['yankees', 'bluejays', 'mariners', 'guardians', 'tigers', 'redsox']
+            ? ['bluejays', 'yankees', 'mariners', 'redsox', 'guardians', 'tigers', 'astros']
             : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets', 'reds', 'diamondbacks'];
 
         const teamNames = this.currentLeague === 'al' 
-            ? ['Yankees', 'Blue Jays', 'Mariners', 'Guardians', 'Tigers', 'Red Sox']
+            ? ['Blue Jays', 'Yankees', 'Mariners', 'Red Sox', 'Guardians', 'Tigers', 'Astros']
             : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets', 'Reds', 'Diamondbacks'];
 
         teamKeys.forEach((teamKey, index) => {
@@ -1573,15 +1584,15 @@ class PlayoffSimulator {
             
             switch (scenario) {
                 case 'home-wins':
-                    // Home team wins all 3 games (slider position 3)
-                    newValue = 3;
+                    // Home team wins the game (slider position 1)
+                    newValue = 1;
                     break;
                 case 'better-record':
-                    // Team with better record wins all 3 games
+                    // Team with better record wins the game
                     newValue = this.getBetterRecordWins(sliderId);
                     break;
                 case 'reset':
-                    // Reset to default (away team wins all 3 games - slider position 0)
+                    // Reset to default (away team wins the game - slider position 0)
                     newValue = 0;
                     break;
                 default:
@@ -1617,35 +1628,35 @@ class PlayoffSimulator {
         let result;
         switch (sliderId) {
             case 'rangers-guardians':
-                result = currentStandings.guardians.wins > currentStandings.rangers.wins ? 3 : 0;
+                result = currentStandings.guardians.wins > currentStandings.rangers.wins ? 1 : 0;
                 console.log('Guardians wins:', currentStandings.guardians.wins, 'Rangers wins:', currentStandings.rangers.wins, 'Result:', result);
                 return result;
             case 'tigers-redsox':
-                result = currentStandings.redsox.wins > currentStandings.tigers.wins ? 3 : 0;
+                result = currentStandings.redsox.wins > currentStandings.tigers.wins ? 1 : 0;
                 console.log('Red Sox wins:', currentStandings.redsox.wins, 'Tigers wins:', currentStandings.tigers.wins, 'Result:', result);
                 return result;
             case 'orioles-yankees':
-                result = currentStandings.yankees.wins > currentStandings.orioles.wins ? 3 : 0;
+                result = currentStandings.yankees.wins > currentStandings.orioles.wins ? 1 : 0;
                 console.log('Yankees wins:', currentStandings.yankees.wins, 'Orioles wins:', currentStandings.orioles.wins, 'Result:', result);
                 return result;
             case 'rays-bluejays':
-                result = currentStandings.bluejays.wins > currentStandings.rays.wins ? 3 : 0;
+                result = currentStandings.bluejays.wins > currentStandings.rays.wins ? 1 : 0;
                 console.log('Blue Jays wins:', currentStandings.bluejays.wins, 'Rays wins:', currentStandings.rays.wins, 'Result:', result);
                 return result;
             case 'cubs-cardinals':
-                result = currentStandings.cardinals.wins > currentStandings.cubs.wins ? 3 : 0;
+                result = currentStandings.cardinals.wins > currentStandings.cubs.wins ? 1 : 0;
                 console.log('Cardinals wins:', currentStandings.cardinals.wins, 'Cubs wins:', currentStandings.cubs.wins, 'Result:', result);
                 return result;
             case 'diamondbacks-padres':
-                result = currentStandings.padres.wins > currentStandings.diamondbacks.wins ? 3 : 0;
+                result = currentStandings.padres.wins > currentStandings.diamondbacks.wins ? 1 : 0;
                 console.log('Padres wins:', currentStandings.padres.wins, 'Diamondbacks wins:', currentStandings.diamondbacks.wins, 'Result:', result);
                 return result;
             case 'mets-marlins':
-                result = currentStandings.marlins.wins > currentStandings.mets.wins ? 3 : 0;
+                result = currentStandings.marlins.wins > currentStandings.mets.wins ? 1 : 0;
                 console.log('Marlins wins:', currentStandings.marlins.wins, 'Mets wins:', currentStandings.mets.wins, 'Result:', result);
                 return result;
             case 'reds-brewers':
-                result = currentStandings.brewers.wins > currentStandings.reds.wins ? 3 : 0;
+                result = currentStandings.brewers.wins > currentStandings.reds.wins ? 1 : 0;
                 console.log('Brewers wins:', currentStandings.brewers.wins, 'Reds wins:', currentStandings.reds.wins, 'Result:', result);
                 return result;
             default:

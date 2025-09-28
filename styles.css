@@ -428,7 +428,7 @@ header h1 {
 }
 
 .slider::after {
-    content: '2 1 0';
+    content: '1 0';
     position: absolute;
     top: -12px;
     left: 0;

@@ -10,13 +10,12 @@ class PlayoffSimulator {
         this.currentStandings = {
             // American League
             al: {
-                yankees: { wins: 92, losses: 68, gamesLeft: 2 },
-                bluejays: { wins: 92, losses: 68, gamesLeft: 2 },
-                mariners: { wins: 89, losses: 70, gamesLeft: 3 },
-                guardians: { wins: 86, losses: 74, gamesLeft: 2 },
-                tigers: { wins: 86, losses: 74, gamesLeft: 2 },
-                redsox: { wins: 88, losses: 72, gamesLeft: 2 },
-                astros: { wins: 85, losses: 75, gamesLeft: 2 },
+                yankees: { wins: 93, losses: 68, gamesLeft: 1 },
+                bluejays: { wins: 93, losses: 68, gamesLeft: 1 },
+                mariners: { wins: 90, losses: 71, gamesLeft: 1 },
+                guardians: { wins: 87, losses: 74, gamesLeft: 1 },
+                tigers: { wins: 87, losses: 74, gamesLeft: 1 },
+                redsox: { wins: 88, losses: 73, gamesLeft: 1 },
                 orioles: { wins: 75, losses: 84, gamesLeft: 3 },
                 rays: { wins: 77, losses: 82, gamesLeft: 3 },
                 rangers: { wins: 80, losses: 79, gamesLeft: 3 },
@@ -154,7 +153,7 @@ class PlayoffSimulator {
 
     initializeOverallRecords() {
         // Initialize all overall records based on current slider positions
-        const alSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays'];
+        const alSliders = ['rangers-guardians', 'tigers-redsox', 'orioles-yankees', 'rays-bluejays'];
         const nlSliders = ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
         
         // Initialize AL records
@@ -216,7 +215,7 @@ class PlayoffSimulator {
 
     setupSliderListeners() {
         // Remove existing listeners first to prevent duplicates
-        const allSliders = ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays',
+        const allSliders = ['rangers-guardians', 'tigers-redsox', 'orioles-yankees', 'rays-bluejays',
                            'cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
         
         allSliders.forEach(sliderId => {
@@ -229,7 +228,7 @@ class PlayoffSimulator {
         });
 
         const leagueSliders = this.currentLeague === 'al' 
-            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays']
+            ? ['rangers-guardians', 'tigers-redsox', 'orioles-yankees', 'rays-bluejays']
             : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
             
         leagueSliders.forEach(sliderId => {
@@ -262,12 +261,6 @@ class PlayoffSimulator {
                 document.getElementById('redsox-wins').textContent = homeWins;
                 this.updateOverallRecord('tigers', awayWins);
                 this.updateOverallRecord('redsox', homeWins);
-                break;
-            case 'astros-angels':
-                document.getElementById('astros-wins').textContent = awayWins;
-                document.getElementById('angels-wins').textContent = homeWins;
-                this.updateOverallRecord('astros', awayWins);
-                this.updateOverallRecord('angels', homeWins);
                 break;
             case 'orioles-yankees':
                 document.getElementById('orioles-wins').textContent = awayWins;
@@ -389,7 +382,6 @@ class PlayoffSimulator {
             // Get slider positions and calculate wins correctly
             const rangersSlider = parseInt(document.getElementById('rangers-guardians').value);
             const tigersSlider = parseInt(document.getElementById('tigers-redsox').value);
-            const astrosSlider = parseInt(document.getElementById('astros-angels').value);
             const oriolesSlider = parseInt(document.getElementById('orioles-yankees').value);
             const raysSlider = parseInt(document.getElementById('rays-bluejays').value);
             
@@ -397,13 +389,11 @@ class PlayoffSimulator {
                 // Away teams get 2 minus slider position
                 rangers: 2 - rangersSlider,
                 tigers: 2 - tigersSlider,
-                astros: 2 - astrosSlider,
                 orioles: 2 - oriolesSlider,
                 rays: 2 - raysSlider,
                 // Home teams get slider position value
                 guardians: rangersSlider,
                 redsox: tigersSlider,
-                angels: astrosSlider,
                 yankees: oriolesSlider,
                 bluejays: raysSlider
             };
@@ -589,8 +579,7 @@ class PlayoffSimulator {
                 { name: 'Mariners', key: 'mariners' },
                 { name: 'Guardians', key: 'guardians' },
                 { name: 'Tigers', key: 'tigers' },
-                { name: 'Red Sox', key: 'redsox' },
-                { name: 'Astros', key: 'astros' }
+                { name: 'Red Sox', key: 'redsox' }
             ]
             : [
                 { name: 'Brewers', key: 'brewers' },
@@ -1178,7 +1167,7 @@ class PlayoffSimulator {
     calculateAllPermutations() {
         const permutations = [];
         const sliderIds = this.currentLeague === 'al' 
-            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays']
+            ? ['rangers-guardians', 'tigers-redsox', 'orioles-yankees', 'rays-bluejays']
             : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
 
         // Generate all possible combinations (4^5 = 1024 for AL, 4^4 = 256 for NL)
@@ -1265,18 +1254,9 @@ class PlayoffSimulator {
                     '2-seed': 0,
                     '3-seed': 0,
                     'wc1': 0,
-                    'wc2': 33,
-                    'wc3': 26,
+                    'wc2': 100,
+                    'wc3': 0,
                     'eliminated': 0
-                },
-                'astros': {
-                    '1-seed': 0,
-                    '2-seed': 0,
-                    '3-seed': 0,
-                    'wc1': 0,
-                    'wc2': 15,
-                    'wc3': 33,
-                    'eliminated': 52
                 }
             };
         } else {
@@ -1362,11 +1342,11 @@ class PlayoffSimulator {
         tbody.innerHTML = '';
 
         const teamKeys = this.currentLeague === 'al' 
-            ? ['yankees', 'bluejays', 'mariners', 'guardians', 'tigers', 'redsox', 'astros']
+            ? ['yankees', 'bluejays', 'mariners', 'guardians', 'tigers', 'redsox']
             : ['brewers', 'phillies', 'dodgers', 'cubs', 'padres', 'mets', 'reds', 'diamondbacks'];
 
         const teamNames = this.currentLeague === 'al' 
-            ? ['Yankees', 'Blue Jays', 'Mariners', 'Guardians', 'Tigers', 'Red Sox', 'Astros']
+            ? ['Yankees', 'Blue Jays', 'Mariners', 'Guardians', 'Tigers', 'Red Sox']
             : ['Brewers', 'Phillies', 'Dodgers', 'Cubs', 'Padres', 'Mets', 'Reds', 'Diamondbacks'];
 
         teamKeys.forEach((teamKey, index) => {
@@ -1525,7 +1505,6 @@ class PlayoffSimulator {
         const sliderMap = {
             'guardians-rangers': 'rangers-guardians',
             'redsox-tigers': 'tigers-redsox',
-            'angels-astros': 'astros-angels',
             'yankees-orioles': 'orioles-yankees',
             'bluejays-rays': 'rays-bluejays',
             'cardinals-cubs': 'cubs-cardinals',
@@ -1578,7 +1557,7 @@ class PlayoffSimulator {
         console.log('Applying preset scenario:', scenario);
         
         const sliderIds = this.currentLeague === 'al' 
-            ? ['rangers-guardians', 'tigers-redsox', 'astros-angels', 'orioles-yankees', 'rays-bluejays']
+            ? ['rangers-guardians', 'tigers-redsox', 'orioles-yankees', 'rays-bluejays']
             : ['cubs-cardinals', 'diamondbacks-padres', 'mets-marlins', 'reds-brewers'];
 
         console.log('Current league:', this.currentLeague, 'Slider IDs:', sliderIds);
@@ -1644,10 +1623,6 @@ class PlayoffSimulator {
             case 'tigers-redsox':
                 result = currentStandings.redsox.wins > currentStandings.tigers.wins ? 3 : 0;
                 console.log('Red Sox wins:', currentStandings.redsox.wins, 'Tigers wins:', currentStandings.tigers.wins, 'Result:', result);
-                return result;
-            case 'astros-angels':
-                result = currentStandings.astros.wins > currentStandings.angels.wins ? 0 : 3;
-                console.log('Astros wins:', currentStandings.astros.wins, 'Angels wins:', currentStandings.angels.wins, 'Result:', result);
                 return result;
             case 'orioles-yankees':
                 result = currentStandings.yankees.wins > currentStandings.orioles.wins ? 3 : 0;
